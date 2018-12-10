@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Ksandr.Books
@@ -15,8 +16,12 @@ namespace Ksandr.Books
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-            .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
-            .UseStartup<Startup>();
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddJsonFile($"appsettings.Local.json", reloadOnChange: true, optional: true);
+                })
+                .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
+                .UseStartup<Startup>();
         }
     }
 }

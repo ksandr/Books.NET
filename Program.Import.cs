@@ -26,7 +26,7 @@ namespace Ksandr.Books
 
             ServiceProvider serviceProvider = new ServiceCollection()
                 .UseSerilog(configuration => configuration.ReadFrom.Configuration(config))
-                .UseBooksContext(config)
+                .AddBooksContext(config)
                 .AddTransient<ImportService>()
                 .BuildServiceProvider();
 

@@ -39,7 +39,7 @@ namespace Ksandr.Books.Utils
             return collection;
         }
 
-        public static IServiceCollection UseBooksContext(this IServiceCollection collection, IConfigurationRoot config)
+        public static IServiceCollection AddBooksContext(this IServiceCollection collection, IConfiguration config)
         {
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection));
