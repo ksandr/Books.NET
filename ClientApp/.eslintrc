@@ -1,0 +1,26 @@
+﻿{
+    "env": {
+        "node": true,
+        "jquery": true
+    },
+    "extends": ["eslint:recommended", "plugin:vue/essential"],
+  "rules": {
+    "array-callback-return": "error",
+    "block-scoped-var": "error",
+    "consistent-return": "error",
+    "curly": "warn",
+    "no-alert": "error",
+    "no-console": "warn",
+    "no-implicit-globals": "error",
+    "vue/html-self-closing": "off"
+  },
+    "parserOptions": {
+        "parser": "babel-eslint",
+        "ecmaVersion": 2017
+    },
+    "plugins": ["import"],
+    "globals": {
+        "moment": true,
+        "import": true
+    }
+}

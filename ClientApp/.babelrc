@@ -1,0 +1,21 @@
+﻿{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": "last 2 versions"
+      }
+    ]
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    "transform-object-rest-spread",
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": true
+      }
+    ]
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "printWidth": 140,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "bracketSpacing": false,
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}
