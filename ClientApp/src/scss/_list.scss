@@ -1,0 +1,23 @@
+.list {
+  list-style: none;
+  padding: 0;
+
+  .list__item {
+    display: block;
+    border: $border-width solid $gray-300;
+    border-radius: $border-radius;
+    padding: ($grid-gutter-width / 2);
+
+    @include hover {
+      background-color: $table-hover-bg;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    &.list__item--pointer {
+      cursor: pointer;
+    }
+  }
+}

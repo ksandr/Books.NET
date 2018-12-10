@@ -1,0 +1,120 @@
+$sin45deg: 0.707106781186548;
+
+$spinner-color: #29d;
+$spinner-size: 30;
+$spinner-speed: 3;
+
+$spinner-circle: $spinner-size * 0.2;
+$spinner-radius: ($spinner-size - $spinner-circle)/2;
+
+.loading-indicator {
+  position: fixed;
+  top: 0;
+  left: 15px;
+  right: 0;
+  z-index: 100500;
+  display: none;
+}
+
+.loading-indicator__bar {
+  height: 3px;
+  margin-bottom: 10px;
+  background-color: $spinner-color;
+  box-shadow: 0 0 2px $spinner-color, 0 0 1px $spinner-color;
+  animation: loading-indicator__bar $spinner-speed + s linear infinite;
+}
+
+@keyframes loading-indicator__bar {
+  0% {
+    width: 0;
+  }
+
+  50% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+.loading-indicator__spinner {
+  @media screen and (max-width: 784px) {
+    display: none;
+  }
+
+  position: relative;
+  width: $spinner-size+px;
+  height: $spinner-size+px;
+  animation: loading-indicator__spinner $spinner-speed+s linear infinite;
+
+  &.circle div {
+    width: $spinner-circle + px;
+    height: $spinner-circle + px;
+    border-radius: 50%;
+  }
+
+  &.bar div {
+    width: $spinner-circle + px;
+    height: $spinner-circle * 1.25 + px;
+    border-radius: 25%;
+  }
+
+  div {
+    position: absolute;
+    top: $spinner-radius + px;
+    left: $spinner-radius + px;
+    background-color: $spinner-color;
+
+    &:nth-child(1) {
+      opacity: 0.25;
+      transform: translate(0, -$spinner-radius + px) scale(0.5);
+    }
+
+    &:nth-child(2) {
+      opacity: 0.4;
+      transform: translate($sin45deg * $spinner-radius + px, -$sin45deg * $spinner-radius + px) rotate(45deg) scale(0.6);
+    }
+
+    &:nth-child(3) {
+      opacity: 0.55;
+      transform: translate($spinner-radius + px, 0) rotate(90deg) scale(0.7);
+    }
+
+    &:nth-child(4) {
+      opacity: 0.7;
+      transform: translate($sin45deg * $spinner-radius + px, $sin45deg * $spinner-radius + px) rotate(-45deg) scale(0.8);
+    }
+
+    &:nth-child(5) {
+      opacity: 0.85;
+      transform: translate(0, $spinner-radius + px) scale(0.9);
+    }
+
+    &:nth-child(6) {
+      transform: translate(-$sin45deg * $spinner-radius + px, $sin45deg * $spinner-radius + px) rotate(45deg);
+    }
+  }
+}
+
+@keyframes loading-indicator__spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(360deg);
+  }
+
+  50% {
+    transform: rotate(720deg);
+  }
+
+  75% {
+    transform: rotate(360deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}

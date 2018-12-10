@@ -16,6 +16,7 @@ namespace Ksandr.Books
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
+                .UseWebRoot("ClientApp/dist")
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     config.AddJsonFile($"appsettings.Local.json", reloadOnChange: true, optional: true);
