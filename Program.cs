@@ -12,7 +12,10 @@ namespace Ksandr.Books
 
         [Verb("import", HelpText = "Imports libaray archive .inpx file")]
         class ImportOptions
-        { }
+        {
+            [Option('i', "inpx", Required = true, HelpText = "Path to .inpx file to import")]
+            public string InpxFile { get; set; }
+        }
 
         public static int Main(string[] args)
         {

@@ -1,0 +1,13 @@
+$navbar-light-active-color: #007bff;
+
+@import "~bootstrap/scss/bootstrap";
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
+@import "grid";
+@import "list";
+
+@include update-grid-columns();
+
+.app-navbar-brand {
+  color: $green !important;
+}

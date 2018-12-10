@@ -1,0 +1,90 @@
+CREATE TABLE IF NOT EXISTS Authors
+(
+  AuthorID   INTEGER NOT NULL CONSTRAINT PK_Authors PRIMARY KEY AUTOINCREMENT,
+  LastName   TEXT    NULL,
+  FirstName  TEXT    NULL,
+  MiddleName TEXT    NULL,
+  SearchName TEXT    NULL
+);
+CREATE INDEX IF NOT EXISTS IX_Authors_SearchName ON Authors(SearchName);
+
+CREATE TABLE IF NOT EXISTS Genres
+(
+  GenreCode  TEXT NOT NULL CONSTRAINT PK_Genres PRIMARY KEY,
+  ParentCode TEXT NULL,
+  Fb2Code    TEXT NULL,
+  GenreAlias TEXT NULL
+);
+CREATE INDEX IF NOT EXISTS IX_Genres_GenreAlias ON Genres(GenreAlias);
+
+CREATE TABLE IF NOT EXISTS Series
+(
+  SeriesID          INTEGER NOT NULL CONSTRAINT PK_Series PRIMARY KEY AUTOINCREMENT,
+  SeriesTitle       TEXT    NULL,
+  SearchSeriesTitle TEXT    NULL
+);
+CREATE INDEX IF NOT EXISTS IX_Series_SearchSeriesTitle ON Series(SearchSeriesTitle);
+
+CREATE TABLE IF NOT EXISTS Books
+(
+  BookID           INTEGER NOT NULL CONSTRAINT PK_Books PRIMARY KEY AUTOINCREMENT,
+  LibId            TEXT    NULL,
+  Title            TEXT    NULL,
+  SeriesId         INTEGER NULL,
+  SeqNumber        TEXT    NULL,
+  UpdateDate       TEXT    NOT NULL,
+  LibRate          INTEGER NULL,
+  Lang             TEXT    NULL,
+  Folder           TEXT    NULL,
+  FileName         TEXT    NULL,
+  InsideNo         INTEGER NOT NULL,
+  Ext              TEXT    NULL,
+  BookSize         INTEGER NOT NULL,
+  IsLocal          INTEGER NOT NULL,
+  IsDeleted        INTEGER NOT NULL,
+  KeyWords         TEXT    NULL,
+  Rate             INTEGER NOT NULL,
+  Progress         INTEGER NOT NULL,
+  Annotation       TEXT    NULL,
+  Review           TEXT    NULL,
+  SearchTitle      TEXT    NULL,
+  SearchLang       TEXT    NULL,
+  SearchFolder     TEXT    NULL,
+  SearchFileName   TEXT    NULL,
+  SearchExt        TEXT    NULL,
+  SearchKeyWords   TEXT    NULL,
+  SearchAnnotation TEXT    NULL,
+  CONSTRAINT FK_Books_Series_SeriesId FOREIGN KEY (SeriesId) REFERENCES Series (SeriesID) ON DELETE RESTRICT
+);
+CREATE INDEX IF NOT EXISTS IX_Books_IsDeleted_SearchTitle ON Books (IsDeleted, SearchTitle);
+CREATE INDEX IF NOT EXISTS IX_Books_IsDeleted_UpdateDate ON Books (IsDeleted, UpdateDate DESC);
+
+CREATE TABLE IF NOT EXISTS Author_List
+(
+  BookID   INTEGER NOT NULL,
+  AuthorID INTEGER NOT NULL,
+  CONSTRAINT PK_Author_List PRIMARY KEY (BookID, AuthorID),
+  CONSTRAINT FK_Author_List_Authors_AuthorID FOREIGN KEY (AuthorID) REFERENCES Authors (AuthorID) ON DELETE RESTRICT,
+  CONSTRAINT FK_Author_List_Books_BookID FOREIGN KEY (BookID) REFERENCES Books (BookID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Genre_List
+(
+  BookID    INTEGER NOT NULL,
+  GenreCode TEXT    NOT NULL,
+  CONSTRAINT PK_Genre_List PRIMARY KEY (BookID, GenreCode),
+  CONSTRAINT FK_Genre_List_Books_BookID FOREIGN KEY (BookID) REFERENCES Books (BookID) ON DELETE CASCADE,
+  CONSTRAINT FK_Genre_List_Genres_GenreCode FOREIGN KEY (GenreCode) REFERENCES Genres (GenreCode) ON DELETE RESTRICT
+);
+
+CREATE VIEW IF NOT EXISTS v_Book_Authors
+AS
+SELECT Author_List.BookId, Author_List.AuthorID, Authors.LastName, Authors.FirstName, Authors.MiddleName
+FROM Author_List INNER JOIN
+  Authors ON Authors.AuthorID = Author_List.AuthorID;
+
+CREATE VIEW IF NOT EXISTS v_Book_Genres
+AS
+SELECT Genre_List.BookId, Genre_List.GenreCode, Genres.GenreAlias
+FROM Genre_List INNER JOIN
+  Genres ON Genres.GenreCode = Genre_List.GenreCode;

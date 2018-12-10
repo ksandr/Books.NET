@@ -1,0 +1,5 @@
+@mixin update-grid-columns($gutter: $grid-gutter-width) {
+  %grid-column {
+    margin-bottom: ($gutter / 2);
+  }
+}
