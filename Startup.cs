@@ -88,6 +88,10 @@ namespace Ksandr.Books
                 Namespace = "Books"
             };
 
+            EntityTypeConfiguration<Book> booksConfiguration = builder.EntitySet<Book>("Books").EntityType;
+            booksConfiguration.Function("Details").Returns<JsonResult>();
+            booksConfiguration.Function("Download").Returns<FileResult>();
+
             builder.EntitySet<Author>("Authors").EntityType
                 .Function("Books").ReturnsCollectionFromEntitySet<Book>("Books");
 
