@@ -16,6 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="App_Data/**" />
+    <None Remove="App_Data/**" />
+    <None Include="App_Data/**" />
+    <Content Include="App_Data/genres_fb2.glst" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <None Remove="Database\SQL\Schema.sql" />
     <EmbeddedResource Include="Database\SQL\Schema.sql" />
   </ItemGroup>

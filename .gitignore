@@ -32,3 +32,7 @@ _ReSharper*/
 packages/
 node_modules/
 dist/
+publish/
+App_Data/*
+!App_Data/genres_fb2.glst
+appsettings.Local.json
