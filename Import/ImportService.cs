@@ -71,9 +71,7 @@ namespace Ksandr.Books.Import
                 {
                     Genre genre = new Genre()
                     {
-
                         Id = record.Id,
-                        ParentId = record.ParentId,
                         Fb2Code = record.Fb2Code,
                         Name = record.Name,
                     };
@@ -132,18 +130,9 @@ namespace Ksandr.Books.Import
             book.InsideNo = inp.Index;
             book.Ext = "." + inp.Ext;
             book.BookSize = inp.BookSize;
-            book.IsLocal = true;
-            book.IsDeleted = inp.IsDeleted;
             book.KeyWords = inp.KeyWords;
-            book.Rate = 0;
-            book.Progress = 0;
-
 
             book.SearchTitle = book.Title.ToUpper();
-            book.SearchLang = book.Lang.ToUpper();
-            book.SearchFileName = book.FileName.ToUpper();
-            book.SearchExt = book.Ext.ToUpper();
-            book.SearchKeyWords = book.KeyWords?.ToUpper();
 
             book.GenreList = await GetBookGenres(book, inp.Genres);
             book.AuthorList = await GetBookAuthors(book, inp.Authors);

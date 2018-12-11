@@ -34,12 +34,6 @@ namespace Ksandr.Books.Database
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Series> Series { get; set; }
 
-        public IQueryable<Book> QueryBooks()
-        {
-            return Books
-                .Where(x => !x.IsDeleted);
-        }
-
         public void CreateSchema()
         {
             var assembly = typeof(BooksContext).GetTypeInfo().Assembly;

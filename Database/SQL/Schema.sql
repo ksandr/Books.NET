@@ -11,7 +11,6 @@ CREATE INDEX IF NOT EXISTS IX_Authors_SearchName ON Authors(SearchName);
 CREATE TABLE IF NOT EXISTS Genres
 (
   GenreCode  TEXT NOT NULL CONSTRAINT PK_Genres PRIMARY KEY,
-  ParentCode TEXT NULL,
   Fb2Code    TEXT NULL,
   GenreAlias TEXT NULL
 );
@@ -40,24 +39,14 @@ CREATE TABLE IF NOT EXISTS Books
   InsideNo         INTEGER NOT NULL,
   Ext              TEXT    NULL,
   BookSize         INTEGER NOT NULL,
-  IsLocal          INTEGER NOT NULL,
-  IsDeleted        INTEGER NOT NULL,
   KeyWords         TEXT    NULL,
-  Rate             INTEGER NOT NULL,
-  Progress         INTEGER NOT NULL,
   Annotation       TEXT    NULL,
   Review           TEXT    NULL,
   SearchTitle      TEXT    NULL,
-  SearchLang       TEXT    NULL,
-  SearchFolder     TEXT    NULL,
-  SearchFileName   TEXT    NULL,
-  SearchExt        TEXT    NULL,
-  SearchKeyWords   TEXT    NULL,
-  SearchAnnotation TEXT    NULL,
   CONSTRAINT FK_Books_Series_SeriesId FOREIGN KEY (SeriesId) REFERENCES Series (SeriesID) ON DELETE RESTRICT
 );
-CREATE INDEX IF NOT EXISTS IX_Books_IsDeleted_SearchTitle ON Books (IsDeleted, SearchTitle);
-CREATE INDEX IF NOT EXISTS IX_Books_IsDeleted_UpdateDate ON Books (IsDeleted, UpdateDate DESC);
+CREATE INDEX IF NOT EXISTS IX_Books_SearchTitle ON Books (SearchTitle);
+CREATE INDEX IF NOT EXISTS IX_Books_UpdateDate ON Books (UpdateDate DESC);
 
 CREATE TABLE IF NOT EXISTS Author_List
 (

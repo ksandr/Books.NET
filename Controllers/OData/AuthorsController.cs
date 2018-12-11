@@ -27,7 +27,7 @@ namespace Ksandr.Books.Controllers.OData
         [EnableQuery]
         public IActionResult Books(int key)
         {
-            return Ok(db.QueryBooks().Where(x => x.AuthorList.Any(a => a.AuthorId == key)));
+            return Ok(db.Books.Where(x => x.AuthorList.Any(a => a.AuthorId == key)));
         }
     }
 }
