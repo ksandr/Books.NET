@@ -19,7 +19,7 @@ namespace Ksandr.Books.Controllers.OData
         }
 
         [EnableQuery]
-        public IActionResult Get(string key)
+        public IActionResult Get(int key)
         {
             return Ok(db.Genres.FirstOrDefault(x => x.Id == key));
         }

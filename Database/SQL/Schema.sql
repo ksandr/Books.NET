@@ -10,9 +10,10 @@ CREATE INDEX IF NOT EXISTS IX_Authors_SearchName ON Authors(SearchName);
 
 CREATE TABLE IF NOT EXISTS Genres
 (
-  GenreCode  TEXT NOT NULL CONSTRAINT PK_Genres PRIMARY KEY,
-  Fb2Code    TEXT NULL,
-  GenreAlias TEXT NULL
+  GenreID    INTEGER NOT NULL CONSTRAINT PK_Genres PRIMARY KEY AUTOINCREMENT,
+  GenreCode  TEXT    NOT NULL,
+  Fb2Code    TEXT    NULL,
+  GenreAlias TEXT    NULL
 );
 CREATE INDEX IF NOT EXISTS IX_Genres_GenreAlias ON Genres(GenreAlias);
 
@@ -59,11 +60,11 @@ CREATE TABLE IF NOT EXISTS Author_List
 
 CREATE TABLE IF NOT EXISTS Genre_List
 (
-  BookID    INTEGER NOT NULL,
-  GenreCode TEXT    NOT NULL,
-  CONSTRAINT PK_Genre_List PRIMARY KEY (BookID, GenreCode),
+  BookID  INTEGER NOT NULL,
+  GenreID INTEGER    NOT NULL,
+  CONSTRAINT PK_Genre_List PRIMARY KEY (BookID, GenreID),
   CONSTRAINT FK_Genre_List_Books_BookID FOREIGN KEY (BookID) REFERENCES Books (BookID) ON DELETE CASCADE,
-  CONSTRAINT FK_Genre_List_Genres_GenreCode FOREIGN KEY (GenreCode) REFERENCES Genres (GenreCode) ON DELETE RESTRICT
+  CONSTRAINT FK_Genre_List_Genres_GenreCode FOREIGN KEY (GenreID) REFERENCES Genres (GenreID) ON DELETE RESTRICT
 );
 
 CREATE VIEW IF NOT EXISTS v_Book_Authors
@@ -74,6 +75,6 @@ FROM Author_List INNER JOIN
 
 CREATE VIEW IF NOT EXISTS v_Book_Genres
 AS
-SELECT Genre_List.BookId, Genre_List.GenreCode, Genres.GenreAlias
+SELECT Genre_List.BookId, Genre_List.GenreID, Genres.GenreAlias
 FROM Genre_List INNER JOIN
-  Genres ON Genres.GenreCode = Genre_List.GenreCode;
+  Genres ON Genres.GenreID = Genre_List.GenreID;

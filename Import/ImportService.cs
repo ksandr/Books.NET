@@ -71,7 +71,7 @@ namespace Ksandr.Books.Import
                 {
                     Genre genre = new Genre()
                     {
-                        Id = record.Id,
+                        GenreCode = record.Id,
                         Fb2Code = record.Fb2Code,
                         Name = record.Name,
                     };

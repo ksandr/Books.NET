@@ -6,7 +6,7 @@ namespace Ksandr.Books.Database
     public class GenreList
     {
         public int BookId { get; set; }
-        public string GenreId { get; set; }
+        public int GenreId { get; set; }
 
         public Book Book { get; set; }
         public Genre Genre { get; set; }
@@ -19,7 +19,7 @@ namespace Ksandr.Books.Database
             builder.ToTable("Genre_List").HasKey(x => new { x.BookId, x.GenreId });
 
             builder.Property(x => x.BookId).HasColumnName("BookID");
-            builder.Property(x => x.GenreId).HasColumnName("GenreCode");
+            builder.Property(x => x.GenreId).HasColumnName("GenreID");
 
             builder.HasOne(x => x.Book).WithMany(x => x.GenreList).HasForeignKey(x => x.BookId).IsRequired();
             builder.HasOne(x => x.Genre).WithMany(x => x.GenreList).HasForeignKey(x => x.GenreId).IsRequired();
