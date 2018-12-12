@@ -15,6 +15,9 @@ namespace Ksandr.Books
         {
             [Option('i', "inpx", Required = true, HelpText = "Path to .inpx file to import")]
             public string InpxFile { get; set; }
+
+            [Option('f', "force", Required = false, Default = false, HelpText = "Force database recreation without confirmation")]
+            public bool Force { get; set; }
         }
 
         public static int Main(string[] args)
