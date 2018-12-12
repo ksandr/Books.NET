@@ -108,10 +108,10 @@ export default {
         this.state = "loading";
       }, this.loadingDelay);
 
-      let url = "/odata/genres" + (this.query ? `?$filter=contains(Name, '${encodeURIComponent(this.query)}')&` : "?");
+      let url = "/odata/genres" + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
 
       return http
-        .get(`${url}$orderby=Id,Name&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${this.pageSize}&$count=true`)
+        .get(`${url}$orderby=Search,Name&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${this.pageSize}&$count=true`)
         .then(result => {
           clearTimeout(timeout);
           this.items = result.data;

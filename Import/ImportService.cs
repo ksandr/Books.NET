@@ -74,6 +74,7 @@ namespace Ksandr.Books.Import
                         GenreCode = record.Id,
                         Fb2Code = record.Fb2Code,
                         Name = record.Name,
+                        Search = record.Name.ToUpper(),
                     };
 
                     _db.Add(genre);

@@ -13,9 +13,10 @@ CREATE TABLE IF NOT EXISTS Genres
   GenreID    INTEGER NOT NULL CONSTRAINT PK_Genres PRIMARY KEY AUTOINCREMENT,
   GenreCode  TEXT    NOT NULL,
   Fb2Code    TEXT    NULL,
-  GenreAlias TEXT    NULL
+  GenreAlias TEXT    NULL,
+  Search     TEXT    NULL
 );
-CREATE INDEX IF NOT EXISTS IX_Genres_GenreAlias ON Genres(GenreAlias);
+CREATE INDEX IF NOT EXISTS IX_Genres_Search ON Genres(Search);
 
 CREATE TABLE IF NOT EXISTS Series
 (
