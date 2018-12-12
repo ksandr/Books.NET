@@ -18,25 +18,25 @@ namespace Ksandr.Books.Import.Cache
 
         public async Task<Series> GetAsync(string title)
         {
-            string searchTitle = title.ToUpper();
+            string search = title.ToUpper();
 
-            if (_cache.TryGetValue(searchTitle, out Series series))
+            if (_cache.TryGetValue(search, out Series series))
                 return series;
 
 
-            series = await _db.Series.FirstOrDefaultAsync(x => x.SearchTitle == searchTitle);
+            series = await _db.Series.FirstOrDefaultAsync(x => x.Search == search);
             if (series == null)
             {
                 series = new Series()
                 {
                     Title = title,
-                    SearchTitle = searchTitle
+                    Search = search
                 };
 
                 _db.Add(series);
             }
 
-            _cache.Add(searchTitle, series);
+            _cache.Add(search, series);
 
             return series;
         }

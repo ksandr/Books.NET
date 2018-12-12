@@ -24,7 +24,7 @@ namespace Ksandr.Books.Database
             builder.Property(x => x.LastName).HasColumnName("LastName");
             builder.Property(x => x.FirstName).HasColumnName("FirstName");
             builder.Property(x => x.MiddleName).HasColumnName("MiddleName");
-            builder.Property(x => x.Search).HasColumnName("SearchName");
+            builder.Property(x => x.Search).HasColumnName("Search");
             builder.HasMany(x => x.BookAuthors).WithOne().HasForeignKey(x => x.AuthorId);
         }
     }

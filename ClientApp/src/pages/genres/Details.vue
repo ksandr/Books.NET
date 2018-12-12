@@ -120,11 +120,10 @@ export default {
           this.item = result.data;
 
           let url =
-            `${baseURL}/books.books` +
-            (this.query ? `?$filter=contains(SearchTitle, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
+            `${baseURL}/books.books` + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
 
           return http.get(
-            `${url}$expand=Series,Authors,Genres&$orderby=SearchTitle&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${
+            `${url}$expand=Series,Authors,Genres&$orderby=Search&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${
               this.pageSize
             }&$count=true`
           );

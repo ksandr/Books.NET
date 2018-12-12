@@ -108,10 +108,10 @@ export default {
         this.state = "loading";
       }, this.loadingDelay);
 
-      let url = "/odata/series" + (this.query ? `?$filter=contains(SearchTitle, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
+      let url = "/odata/series" + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
 
       return http
-        .get(`${url}$orderby=SearchTitle&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${this.pageSize}&$count=true`)
+        .get(`${url}$orderby=Search&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${this.pageSize}&$count=true`)
         .then(result => {
           clearTimeout(timeout);
           this.items = result.data;

@@ -132,7 +132,7 @@ namespace Ksandr.Books.Import
             book.BookSize = inp.BookSize;
             book.KeyWords = inp.KeyWords;
 
-            book.SearchTitle = book.Title.ToUpper();
+            book.Search = book.Title.ToUpper();
 
             book.GenreList = await GetBookGenres(book, inp.Genres);
             book.AuthorList = await GetBookAuthors(book, inp.Authors);

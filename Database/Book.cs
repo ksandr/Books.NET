@@ -24,7 +24,7 @@ namespace Ksandr.Books.Database
         public string KeyWords { get; set; }
         public string Annotation { get; set; }
         public string Review { get; set; }
-        public string SearchTitle { get; set; }
+        public string Search { get; set; }
 
         public virtual IList<AuthorList> AuthorList { get; set; }
         public virtual IList<GenreList> GenreList { get; set; }
@@ -54,7 +54,7 @@ namespace Ksandr.Books.Database
             builder.Property(x => x.KeyWords).HasColumnName("KeyWords");
             builder.Property(x => x.Annotation).HasColumnName("Annotation");
             builder.Property(x => x.Review).HasColumnName("Review");
-            builder.Property(x => x.SearchTitle).HasColumnName("SearchTitle");
+            builder.Property(x => x.Search).HasColumnName("Search");
 
             builder.HasOne(x => x.Series).WithMany(x => x.Books).HasForeignKey("SeriesId");
 
