@@ -68,7 +68,7 @@ export default {
   name: "series-details-page",
   props: {
     id: {
-      type: String,
+      type: [Number, String],
       required: true,
     },
     page: {
@@ -112,7 +112,7 @@ export default {
         this.state = "loading";
       }, this.loadingDelay);
 
-      let baseURL = `/odata/genres('${this.id.replace(/_/g, ".")}')`;
+      let baseURL = `/odata/genres(${this.id})`;
 
       return http
         .get(baseURL)

@@ -137,7 +137,7 @@ export default {
       this.$router.push({name: "genres", params: {page: 1}, query: this.query ? {q: encodeURIComponent(this.query)} : null});
     },
     details(id) {
-      this.$router.push({name: "genres-details", params: {id: id.replace(/\./g, "_")}});
+      this.$router.push({name: "genres-details", params: {id: id}});
     },
   },
 };

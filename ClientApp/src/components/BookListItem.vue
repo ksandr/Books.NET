@@ -31,7 +31,7 @@
       <ul>
         <li v-for="genre in item.Genres"
             :key="genre.Id">
-          <router-link :to="{name: 'genres-details', params: { id: (genre.Id.replace(/\./g, '_')) } }">
+          <router-link :to="{name: 'genres-details', params: { id: genre.Id } }">
             {{ genre.Name }}
           </router-link>
         </li>
