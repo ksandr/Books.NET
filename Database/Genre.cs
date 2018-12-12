@@ -7,7 +7,6 @@ namespace Ksandr.Books.Database
     public class Genre
     {
         public int Id { get; set; }
-        public string GenreCode { get; set; }
         public string Fb2Code { get; set; }
         public string Name { get; set; }
         public string Search { get; set; }
@@ -20,7 +19,6 @@ namespace Ksandr.Books.Database
         {
             builder.ToTable("Genres").HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("GenreID").IsRequired();
-            builder.Property(x => x.GenreCode).HasColumnName("GenreCode").IsRequired();
             builder.Property(x => x.Fb2Code).HasColumnName("Fb2Code");
             builder.Property(x => x.Name).HasColumnName("GenreAlias");
             builder.Property(x => x.Search).HasColumnName("Search");

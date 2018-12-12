@@ -69,19 +69,23 @@ namespace Ksandr.Books.Import
 
                 foreach (GenreRecord record in reader.ReadGenres(cancellationToken))
                 {
-                    Genre genre = new Genre()
+                    Genre genre = await _genresCache.GetAsync(record.Fb2Code);
+                    if (genre != null)
+                        continue;
+
+                    genre = new Genre()
                     {
-                        GenreCode = record.Id,
                         Fb2Code = record.Fb2Code,
                         Name = record.Name,
                         Search = record.Name.ToUpper(),
                     };
 
-                    _db.Add(genre);
+                    await _db.AddAsync(genre);
+                    _genresCache.Add(genre);
                 }
-            }
 
-            await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
+            }
         }
 
         private async Task LoadInpx(string fileName, IEnumerable<string> languages, CancellationToken cancellationToken)
