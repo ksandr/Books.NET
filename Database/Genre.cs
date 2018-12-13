@@ -19,9 +19,9 @@ namespace Ksandr.Books.Database
         {
             builder.ToTable("Genres").HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("GenreID").IsRequired();
-            builder.Property(x => x.Fb2Code).HasColumnName("Fb2Code");
-            builder.Property(x => x.Name).HasColumnName("GenreAlias");
-            builder.Property(x => x.Search).HasColumnName("Search");
+            builder.Property(x => x.Fb2Code).HasColumnName("Fb2Code").IsRequired();
+            builder.Property(x => x.Name).HasColumnName("GenreAlias").IsRequired();
+            builder.Property(x => x.Search).HasColumnName("Search").IsRequired();
             builder.HasMany(x => x.GenreList).WithOne(x => x.Genre).HasForeignKey(x => x.GenreId);
         }
     }
