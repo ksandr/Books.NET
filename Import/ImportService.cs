@@ -69,20 +69,23 @@ namespace Ksandr.Books.Import
 
                 foreach (GenreRecord record in reader.ReadGenres(cancellationToken))
                 {
-                    Genre genre = new Genre()
-                    {
+                    Genre genre = await _genresCache.GetAsync(record.Fb2Code);
+                    if (genre != null)
+                        continue;
 
-                        Id = record.Id,
-                        ParentId = record.ParentId,
+                    genre = new Genre()
+                    {
                         Fb2Code = record.Fb2Code,
                         Name = record.Name,
+                        Search = record.Name.ToUpper(),
                     };
 
-                    _db.Add(genre);
+                    await _db.AddAsync(genre);
+                    _genresCache.Add(genre);
                 }
-            }
 
-            await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
+            }
         }
 
         private async Task LoadInpx(string fileName, IEnumerable<string> languages, CancellationToken cancellationToken)
@@ -132,18 +135,9 @@ namespace Ksandr.Books.Import
             book.InsideNo = inp.Index;
             book.Ext = "." + inp.Ext;
             book.BookSize = inp.BookSize;
-            book.IsLocal = true;
-            book.IsDeleted = inp.IsDeleted;
             book.KeyWords = inp.KeyWords;
-            book.Rate = 0;
-            book.Progress = 0;
 
-
-            book.SearchTitle = book.Title.ToUpper();
-            book.SearchLang = book.Lang.ToUpper();
-            book.SearchFileName = book.FileName.ToUpper();
-            book.SearchExt = book.Ext.ToUpper();
-            book.SearchKeyWords = book.KeyWords?.ToUpper();
+            book.Search = book.Title.ToUpper();
 
             book.GenreList = await GetBookGenres(book, inp.Genres);
             book.AuthorList = await GetBookAuthors(book, inp.Authors);

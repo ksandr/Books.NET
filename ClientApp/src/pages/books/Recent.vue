@@ -66,7 +66,7 @@ export default {
       }, this.loadingDelay);
 
       return http
-        .get(`/odata/books?$expand=Series,Authors,Genres&$orderby=UpdateDate desc,SearchTitle&&$top=${this.pageSize}`)
+        .get(`/odata/books?$expand=Series,Authors,Genres&$orderby=UpdateDate desc,Search&&$top=${this.pageSize}`)
         .then(result => {
           clearTimeout(timeout);
           this.items = result.data;

@@ -30,13 +30,13 @@ namespace Ksandr.Books.Controllers.OData
         [EnableQuery]
         public IActionResult Get()
         {
-            return Ok(db.QueryBooks());
+            return Ok(db.Books);
         }
 
         [EnableQuery]
         public IActionResult Get(int key)
         {
-            return Ok(db.QueryBooks().Include(x => x.Series).Include(x => x.Authors).Include(x => x.Genres).FirstOrDefault(x => x.Id == key));
+            return Ok(db.Books.Include(x => x.Series).Include(x => x.Authors).Include(x => x.Genres).FirstOrDefault(x => x.Id == key));
         }
 
         public IActionResult Download(int key)
@@ -44,7 +44,7 @@ namespace Ksandr.Books.Controllers.OData
             bool returnZip = Request.Query.Any(x => x.Key == "zip");
 
             Book book = db.Books.SingleOrDefault(x => x.Id == key);
-            if (book == null || book.IsDeleted)
+            if (book == null)
                 return NotFound();
 
             byte[] fileContent = ReadFileContent(book);
@@ -113,7 +113,7 @@ namespace Ksandr.Books.Controllers.OData
         {
 
             Book book = db.Books.SingleOrDefault(x => x.Id == key);
-            if (book == null || book.IsDeleted)
+            if (book == null)
                 return NotFound();
 
             byte[] fileContent = ReadFileContent(book);

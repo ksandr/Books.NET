@@ -21,10 +21,10 @@ namespace Ksandr.Books.Database
             builder.ToTable("Authors").HasKey(x => x.Id);
             builder.Property(x => x.Id).HasColumnName("AuthorID").IsRequired();
 
-            builder.Property(x => x.LastName).HasColumnName("LastName");
+            builder.Property(x => x.LastName).HasColumnName("LastName").IsRequired();
             builder.Property(x => x.FirstName).HasColumnName("FirstName");
             builder.Property(x => x.MiddleName).HasColumnName("MiddleName");
-            builder.Property(x => x.Search).HasColumnName("SearchName");
+            builder.Property(x => x.Search).HasColumnName("Search").IsRequired();
             builder.HasMany(x => x.BookAuthors).WithOne().HasForeignKey(x => x.AuthorId);
         }
     }

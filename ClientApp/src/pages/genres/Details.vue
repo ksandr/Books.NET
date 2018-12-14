@@ -68,7 +68,7 @@ export default {
   name: "series-details-page",
   props: {
     id: {
-      type: String,
+      type: [Number, String],
       required: true,
     },
     page: {
@@ -112,7 +112,7 @@ export default {
         this.state = "loading";
       }, this.loadingDelay);
 
-      let baseURL = `/odata/genres('${this.id.replace(/_/g, ".")}')`;
+      let baseURL = `/odata/genres(${this.id})`;
 
       return http
         .get(baseURL)
@@ -120,11 +120,10 @@ export default {
           this.item = result.data;
 
           let url =
-            `${baseURL}/books.books` +
-            (this.query ? `?$filter=contains(SearchTitle, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
+            `${baseURL}/books.books` + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
 
           return http.get(
-            `${url}$expand=Series,Authors,Genres&$orderby=SearchTitle&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${
+            `${url}$expand=Series,Authors,Genres&$orderby=Search&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${
               this.pageSize
             }&$count=true`
           );

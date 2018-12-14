@@ -17,7 +17,7 @@ namespace Ksandr.Books.Database
         {
             builder.ToTable("v_Book_Genres").HasKey(x => new { x.BookId, x.Id });
             builder.Property(x => x.BookId).HasColumnName("BookID");
-            builder.Property(x => x.Id).HasColumnName("GenreCode");
+            builder.Property(x => x.Id).HasColumnName("GenreID");
             builder.Property(x => x.Name).HasColumnName("GenreAlias");
         }
     }

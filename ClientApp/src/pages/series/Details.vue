@@ -85,7 +85,7 @@ export default {
         .then(result => {
           this.item = result.data;
 
-          return http.get(`/odata/series(${this.id})/books.books?$expand=Series,Authors,Genres&$orderby=SeqNumber,SearchTitle,UpdateDate`);
+          return http.get(`/odata/series(${this.id})/books.books?$expand=Series,Authors,Genres&$orderby=SeqNumber,Search,UpdateDate`);
         })
         .then(result => {
           this.item.Books = result.data.value;
