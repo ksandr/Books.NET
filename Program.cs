@@ -6,14 +6,14 @@ namespace Ksandr.Books
 {
     public partial class Program
     {
-        [Verb("web", HelpText = "Starts Books.NET Web server console")]
+        [Verb("web", HelpText = "Start Books.NET Web server.")]
         class WebOptions
         { }
 
-        [Verb("import", HelpText = "Imports libaray archive .inpx file")]
+        [Verb("import", HelpText = "Import libaray archive from .inpx file.")]
         class ImportOptions
         {
-            [Option('i', "inpx", Required = true, HelpText = "Path to .inpx file to import")]
+            [Option('i', "inpx", Required = true, HelpText = "Path to .inpx file")]
             public string InpxFile { get; set; }
 
             [Option('f', "force", Required = false, Default = false, HelpText = "Force database recreation without confirmation")]
@@ -31,7 +31,6 @@ namespace Ksandr.Books
 
         static int RunErrors(IEnumerable<Error> errors)
         {
-            Console.WriteLine("Invalid options");
             return 1;
         }
     }
