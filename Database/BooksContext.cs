@@ -66,10 +66,10 @@ namespace Ksandr.Books.Database
                 Database.ExecuteSqlCommand("DELETE FROM Authors");
                 Database.ExecuteSqlCommand("DELETE FROM Genres");
                 Database.ExecuteSqlCommand("DELETE FROM Series");
+
+                Database.ExecuteSqlCommand("DELETE FROM sqlite_sequence");
                 tx.Commit();
             }
-
-            Vacuum();
         }
     }
 }

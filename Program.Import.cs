@@ -14,6 +14,9 @@ namespace Ksandr.Books
     {
         static int RunImport(ImportOptions opts)
         {
+            if (!Confirm(opts.Force))
+                return -1;
+
             string environmentName = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
 
             IConfigurationRoot config = new ConfigurationBuilder()
@@ -45,6 +48,34 @@ namespace Ksandr.Books
             Console.ReadLine();
 #endif
             return 0;
+        }
+
+        static bool Confirm(bool force)
+        {
+            if (force)
+            {
+                Print(ConsoleColor.Yellow,
+                    "Force database recreation.",
+                    "Hope you know what you are doing...");
+                return true;
+            }
+
+            Print(ConsoleColor.Red, "Database will be recreated and all data will be deleted",
+            "Are you shure you want to continue? [y/n]?");
+            string answer = Console.ReadLine();
+
+            return string.Equals(answer, "y", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        static void Print(ConsoleColor color, params string[] messages)
+        {
+            ConsoleColor oldColor = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+
+            foreach (string message in messages)
+                Console.WriteLine(message);
+
+            Console.ForegroundColor = oldColor;
         }
     }
 }
