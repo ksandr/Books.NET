@@ -6,6 +6,7 @@
           <h1>Авторы</h1>
         </div>
       </div>
+      <app-error></app-error>
       <div v-if="state != 'none' && state != 'loading'"
            class="row">
         <div class="col-md-6">
@@ -47,14 +48,6 @@
         <div class="col-sm-12">
           <app-alert variant="warning">
             Нет данных
-          </app-alert>
-        </div>
-      </div>
-      <div v-if="state == 'error'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="danger">
-            Ошибка
           </app-alert>
         </div>
       </div>

@@ -31,18 +31,11 @@
           </app-alert>
         </div>
       </div>
+      <app-error></app-error>
       <div v-if="state == 'loaded'"
            class="row">
         <div class="col-sm-12">
           <app-book-list :items="books.value"></app-book-list>
-        </div>
-      </div>
-      <div v-if="state == 'error'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="danger">
-            Ошибка
-          </app-alert>
         </div>
       </div>
       <template v-if="state != 'none' && state != 'loading'">

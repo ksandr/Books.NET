@@ -5,6 +5,7 @@
         <h1>Новые книги</h1>
       </div>
     </div>
+    <app-error></app-error>
     <div v-if="state == 'loading'"
          class="row">
       <div class="col-sm-12">
@@ -24,14 +25,6 @@
       <div class="col-sm-12">
         <app-alert variant="warning">
           Нет даных
-        </app-alert>
-      </div>
-    </div>
-    <div v-if="state == 'error'"
-         class="row">
-      <div class="col-sm-12">
-        <app-alert variant="danger">
-          Ошибка
         </app-alert>
       </div>
     </div>

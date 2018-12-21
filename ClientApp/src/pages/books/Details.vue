@@ -18,6 +18,8 @@
         </div>
       </div>
 
+      <app-error></app-error>
+
       <template v-if="state == 'loaded'">
         <div class="row">
           <div v-if="details.Cover.Data"
@@ -112,15 +114,6 @@
           </div>
         </template>
       </template>
-
-      <div v-if="state == 'error'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="danger">
-            Ошибка
-          </app-alert>
-        </div>
-      </div>
 
       <template v-if="state != 'none' && state != 'loading'">
         <div class="row">
