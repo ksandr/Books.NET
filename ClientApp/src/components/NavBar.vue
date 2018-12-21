@@ -28,14 +28,38 @@
 </template>
 
 <script>
-import "bootstrap/js/src/collapse";
-
 import NavItem from "./NavItem";
 
 export default {
   name: "app-nav-bar",
   components: {
     NavItem,
+  },
+  mounted: function() {
+    this.$nextTick(function() {
+      this.$el.querySelectorAll("[data-toggle='collapse']").forEach(element => {
+        let targetSelector = element.getAttribute("data-target");
+        let targets = document.querySelectorAll(targetSelector);
+        element.addEventListener("click", function() {
+          let expanded = this.getAttribute("aria-expanded") == "true";
+          this.setAttribute("aria-expanded", !expanded);
+
+          if (expanded) {
+            this.classList.add("collapsed");
+          } else {
+            this.classList.remove("collapsed");
+          }
+
+          targets.forEach(target => {
+            if (expanded) {
+              target.classList.remove("show");
+            } else {
+              target.classList.add("show");
+            }
+          });
+        });
+      });
+    });
   },
 };
 </script>
