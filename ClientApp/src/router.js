@@ -1,6 +1,8 @@
 ﻿import Vue from "vue";
 import VueRouter from "vue-router";
 
+import store from "./store";
+
 import BooksIndexPage from "./pages/books/Index";
 import BooksRecentPage from "./pages/books/Recent";
 import BooksDetailsPage from "./pages/books/Details";
@@ -36,6 +38,11 @@ const router = new VueRouter({
 
     {path: "*", redirect: "/"},
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  store.commit("app/navigate");
+  next();
 });
 
 export default router;

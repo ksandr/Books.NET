@@ -5,9 +5,7 @@
         <h1>Все книги</h1>
       </div>
     </div>
-    <app-error></app-error>
-    <div v-if="state != 'none' && state != 'loading'"
-         class="row">
+    <app-navigation>
       <div class="col-md-6">
         <app-search-form :submit="search"
                          :value="query"></app-search-form>
@@ -18,29 +16,13 @@
                         :total-pages="totalPages"
                         justifyContent="end"></app-pagination>
       </div>
-    </div>
-    <div v-if="state == 'loading'"
-         class="row">
-      <div class="col-sm-12">
-        <app-alert variant="info">
-          Загрузка...
-        </app-alert>
-      </div>
-    </div>
-    <div v-if="state == 'loaded'"
-         class="row">
-      <div class="col-sm-12">
-        <app-book-list :items="items.value"></app-book-list>
-      </div>
-    </div>
-    <div v-if="state == 'no-data'"
-         class="row">
-      <div class="col-sm-12">
-        <app-alert variant="warning">
-          Нет данных
-        </app-alert>
-      </div>
-    </div>
+    </app-navigation>
+    <app-error></app-error>
+    <app-loading></app-loading>
+    <app-no-data></app-no-data>
+    <app-content>
+      <app-book-list :items="items.value"></app-book-list>
+    </app-content>
   </div>
 </template>
 
@@ -60,8 +42,7 @@ export default {
     return {
       loadingDelay: 500,
       pageSize: 50,
-      state: "none",
-      items: null,
+      items: {},
       query: this.$route.query.q ? decodeURIComponent(this.$route.query.q) : null,
     };
   },
@@ -87,7 +68,7 @@ export default {
   methods: {
     load() {
       let timeout = setTimeout(() => {
-        this.state = "loading";
+        this.$store.commit("app/loading");
       }, this.loadingDelay);
 
       let url = "/odata/books" + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
@@ -101,12 +82,11 @@ export default {
         .then(result => {
           clearTimeout(timeout);
           this.items = result.data;
-          this.state = this.items.value.length == 0 ? "no-data" : "loaded";
+          this.$store.commit(`app/${this.items.value.length == 0 ? "noData" : "loaded"}`);
         })
-        .catch(e => {
+        .catch(() => {
           clearTimeout(timeout);
-          this.error = e;
-          this.state = "error";
+          this.$store.commit("app/error");
         });
     },
     pageLink(page) {
