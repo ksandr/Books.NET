@@ -6,9 +6,7 @@
           <h1>Серии</h1>
         </div>
       </div>
-      <app-error></app-error>
-      <div v-if="state != 'none' && state != 'loading'"
-           class="row">
+      <app-navigation>
         <div class="col-md-6">
           <app-search-form :submit="search"
                            :value="query"></app-search-form>
@@ -19,38 +17,22 @@
                           :total-pages="totalPages"
                           justifyContent="end"></app-pagination>
         </div>
-      </div>
-      <div v-if="state == 'loading'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="info">
-            Загрузка...
-          </app-alert>
-        </div>
-      </div>
-      <div v-if="state == 'loaded'"
-           class="row">
-        <div class="col-sm-12">
-          <ul class="list">
-            <li v-for="item in items.value"
-                :key="item.Id"
-                class="list__item list__item--pointer"
-                v-on:click.prevent="details(item.Id)">
-              <p>
-                {{ item.Title }}
-              </p>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div v-if="state == 'no-data'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="warning">
-            Нет данных
-          </app-alert>
-        </div>
-      </div>
+      </app-navigation>
+      <app-error></app-error>
+      <app-loading></app-loading>
+      <app-no-data></app-no-data>
+      <app-content>
+        <ul class="list">
+          <li v-for="item in items.value"
+              :key="item.Id"
+              class="list__item list__item--pointer"
+              v-on:click.prevent="details(item.Id)">
+            <p>
+              {{ item.Title }}
+            </p>
+          </li>
+        </ul>
+      </app-content>
     </div>
   </div>
 </template>
@@ -71,8 +53,7 @@ export default {
     return {
       loadingDelay: 500,
       pageSize: 50,
-      state: "none",
-      items: null,
+      items: {},
       query: this.$route.query.q ? decodeURIComponent(this.$route.query.q) : null,
     };
   },
@@ -98,7 +79,7 @@ export default {
   methods: {
     load() {
       let timeout = setTimeout(() => {
-        this.state = "loading";
+        this.$store.commit("app/loading");
       }, this.loadingDelay);
 
       let url = "/odata/series" + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
@@ -108,12 +89,11 @@ export default {
         .then(result => {
           clearTimeout(timeout);
           this.items = result.data;
-          this.state = this.items.value.length == 0 ? "no-data" : "loaded";
+          this.$store.commit(`app/${this.items.value.length == 0 ? "noData" : "loaded"}`);
         })
-        .catch(e => {
+        .catch(() => {
           clearTimeout(timeout);
-          this.error = e;
-          this.state = "error";
+          this.$store.commit("app/error");
         });
     },
     pageLink(page) {

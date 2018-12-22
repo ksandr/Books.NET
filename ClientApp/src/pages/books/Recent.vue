@@ -6,28 +6,11 @@
       </div>
     </div>
     <app-error></app-error>
-    <div v-if="state == 'loading'"
-         class="row">
-      <div class="col-sm-12">
-        <app-alert variant="info">
-          Загрузка...
-        </app-alert>
-      </div>
-    </div>
-    <div v-if="state == 'loaded'"
-         class="row">
-      <div class="col-sm-12">
-        <app-book-list :items="items.value"></app-book-list>
-      </div>
-    </div>
-    <div v-if="state == 'no-data'"
-         class="row">
-      <div class="col-sm-12">
-        <app-alert variant="warning">
-          Нет даных
-        </app-alert>
-      </div>
-    </div>
+    <app-loading></app-loading>
+    <app-no-data></app-no-data>
+    <app-content>
+      <app-book-list :items="items.value"></app-book-list>
+    </app-content>
   </div>
 </template>
 
@@ -40,8 +23,7 @@ export default {
     return {
       loadingDelay: 500,
       pageSize: 50,
-      state: "none",
-      items: null,
+      items: {},
     };
   },
   created() {
@@ -55,7 +37,7 @@ export default {
   methods: {
     load() {
       let timeout = setTimeout(() => {
-        this.state = "loading";
+        this.$store.commit("app/loading");
       }, this.loadingDelay);
 
       return http
@@ -63,12 +45,11 @@ export default {
         .then(result => {
           clearTimeout(timeout);
           this.items = result.data;
-          this.state = this.items.value.length == 0 ? "no-data" : "loaded";
+          this.$store.commit(`app/${this.items.value.length == 0 ? "noData" : "loaded"}`);
         })
-        .catch(e => {
+        .catch(() => {
           clearTimeout(timeout);
-          this.error = e;
-          this.state = "error";
+          this.$store.commit("app/error");
         });
     },
   },
