@@ -5,43 +5,36 @@
         <div class="col-sm-12">
           <h1>
             Серии
-            <small v-if="state == 'loaded'"
+            <small v-if="isLoaded"
                    class="text-muted">{{ item.Title }}</small>
           </h1>
         </div>
       </div>
+      <app-loading></app-loading>
       <app-error></app-error>
-      <div v-if="state == 'loading'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="info">
-            Загрузка...
-          </app-alert>
-        </div>
-      </div>
-      <div v-if="state == 'loaded'"
-           class="row">
-        <div class="col-sm-12">
-          <app-book-list :items="item.Books"></app-book-list>
-        </div>
-      </div>
-      <template v-if="state != 'none' && state != 'loading'">
-        <div class="row">
-          <div class="col">
-            <hr>
+      <app-content>
+        <app-book-list :items="item.Books"></app-book-list>
+      </app-content>
+      <app-navigation>
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <hr>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <app-back-button block></app-back-button>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-sm-6 col-md-4 col-lg-3">
-            <app-back-button block></app-back-button>
-          </div>
-        </div>
-      </template>
+      </app-navigation>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
 import http from "../../utils/http.js";
 
 export default {
@@ -55,9 +48,13 @@ export default {
   data() {
     return {
       loadingDelay: 500,
-      state: "none",
-      item: null,
+      item: {},
     };
+  },
+  computed: {
+    ...mapGetters({
+      isLoaded: "app/isLoaded",
+    }),
   },
   created() {
     this.load();
@@ -70,7 +67,7 @@ export default {
   methods: {
     load() {
       let timeout = setTimeout(() => {
-        this.state = "loading";
+        this.$store.commit("app/loading");
       }, this.loadingDelay);
 
       return http
@@ -86,12 +83,11 @@ export default {
         })
         .then(() => {
           clearTimeout(timeout);
-          this.state = "loaded";
+          this.$store.commit("app/loaded");
         })
-        .catch(e => {
+        .catch(() => {
           clearTimeout(timeout);
-          this.error = e;
-          this.state = "error";
+          this.$store.commit("app/error");
         });
     },
   },

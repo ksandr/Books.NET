@@ -5,13 +5,14 @@
         <div class="col-sm-12">
           <h1>
             Жанры
-            <small v-if="state == 'loaded'"
+            <small v-if="isLoaded"
                    class="text-muted">{{ item.Name }}</small>
           </h1>
         </div>
       </div>
-      <div v-if="state != 'none' && state != 'loading'"
-           class="row">
+      <app-loading></app-loading>
+      <app-error></app-error>
+      <app-navigation>
         <div class="col-md-6">
           <app-search-form :submit="search"
                            :value="query"></app-search-form>
@@ -22,39 +23,31 @@
                           :total-pages="totalPages"
                           justifyContent="end"></app-pagination>
         </div>
-      </div>
-      <div v-if="state == 'loading'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="info">
-            Загрузка...
-          </app-alert>
-        </div>
-      </div>
+      </app-navigation>
       <app-error></app-error>
-      <div v-if="state == 'loaded'"
-           class="row">
-        <div class="col-sm-12">
-          <app-book-list :items="books.value"></app-book-list>
-        </div>
-      </div>
-      <template v-if="state != 'none' && state != 'loading'">
-        <div class="row">
-          <div class="col">
-            <hr>
+      <app-content>
+        <app-book-list :items="books.value"></app-book-list>
+      </app-content>
+      <app-navigation>
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <hr>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <app-back-button block></app-back-button>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-sm-6 col-md-4 col-lg-3">
-            <app-back-button block></app-back-button>
-          </div>
-        </div>
-      </template>
+      </app-navigation>
     </div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
 import http from "../../utils/http.js";
 
 export default {
@@ -74,13 +67,15 @@ export default {
     return {
       loadingDelay: 500,
       pageSize: 50,
-      state: "none",
-      item: null,
-      books: null,
+      item: {},
+      books: [],
       query: this.$route.query.q ? decodeURIComponent(this.$route.query.q) : null,
     };
   },
   computed: {
+    ...mapGetters({
+      isLoaded: "app/isLoaded",
+    }),
     pageNumber() {
       return parseInt(this.page);
     },
@@ -102,7 +97,7 @@ export default {
   methods: {
     load() {
       let timeout = setTimeout(() => {
-        this.state = "loading";
+        this.$store.commit("app/loading");
       }, this.loadingDelay);
 
       let baseURL = `/odata/genres(${this.id})`;
@@ -127,12 +122,11 @@ export default {
         })
         .then(() => {
           clearTimeout(timeout);
-          this.state = "loaded";
+          this.$store.commit("app/loaded");
         })
-        .catch(e => {
+        .catch(() => {
           clearTimeout(timeout);
-          this.error = e;
-          this.state = "error";
+          this.$store.commit("app/error");
         });
     },
     pageLink(page) {
