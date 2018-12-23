@@ -4,6 +4,7 @@ import AlertLoading from "./AlertLoading";
 import AlertNoData from "./AlertNoData";
 import AppContent from "./AppContent";
 import AppNavigation from "./AppNavigation";
+import BookDetails from "./BookDetails";
 import BackButton from "./BackButton";
 import BookList from "./BookList";
 import NavBar from "./NavBar";
@@ -18,6 +19,7 @@ export default {
     Vue.component("app-no-data", AlertNoData);
     Vue.component("app-content", AppContent);
     Vue.component("app-navigation", AppNavigation);
+    Vue.component("app-book-details", BookDetails);
     Vue.component("app-back-button", BackButton);
     Vue.component("app-book-list", BookList);
     Vue.component("app-nav-bar", NavBar);
