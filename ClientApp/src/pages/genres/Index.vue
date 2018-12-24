@@ -38,80 +38,15 @@
 </template>
 
 <script>
-import http from "../../utils/http.js";
+import indexMixin from "../../mixins/index";
 
 export default {
   name: "genres-index-page",
-  props: {
-    page: {
-      type: [Number, String],
-      required: false,
-      default: "1",
-    },
-  },
+  mixins: [indexMixin],
   data() {
     return {
-      loadingDelay: 500,
-      pageSize: 50,
-      items: {},
-      query: this.$route.query.q ? decodeURIComponent(this.$route.query.q) : null,
+      entity: "genres",
     };
-  },
-  computed: {
-    pageNumber() {
-      return parseInt(this.page);
-    },
-    totalItems: function() {
-      return this.items != null ? this.items["@odata.count"] : 0;
-    },
-    totalPages: function() {
-      return Math.ceil(this.totalItems / this.pageSize);
-    },
-  },
-  created() {
-    this.load();
-  },
-  watch: {
-    $route() {
-      this.load();
-    },
-  },
-  methods: {
-    load() {
-      let timeout = setTimeout(() => {
-        this.$store.commit("app/loading");
-      }, this.loadingDelay);
-
-      let url = "/odata/genres" + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
-
-      return http
-        .get(`${url}$orderby=Search,Name&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${this.pageSize}&$count=true`)
-        .then(result => {
-          clearTimeout(timeout);
-          this.items = result.data;
-          this.$store.commit(`app/${this.items.value.length == 0 ? "noData" : "loaded"}`);
-        })
-        .catch(() => {
-          clearTimeout(timeout);
-          this.$store.commit("app/error");
-        });
-    },
-    pageLink(page) {
-      return {
-        name: "genres",
-        params: {
-          page: page,
-        },
-        query: this.$route.query.q ? {q: this.$route.query.q} : null,
-      };
-    },
-    search(q) {
-      this.query = q;
-      this.$router.push({name: "genres", params: {page: 1}, query: this.query ? {q: encodeURIComponent(this.query)} : null});
-    },
-    details(id) {
-      this.$router.push({name: "genres-details", params: {id: id}});
-    },
   },
 };
 </script>
