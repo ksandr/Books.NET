@@ -37,17 +37,19 @@ export default {
     },
   },
   methods: {
+    getURL() {
+      return new URLBuilder(this.entity)
+        .withSearch(this.query)
+        .orderBy("Search")
+        .page(this.pageNumber, this.pageSize)
+        .build();
+    },
     load() {
       let timeout = setTimeout(() => {
         this.$store.commit("app/loading");
       }, this.loadingDelay);
 
-      let url = new URLBuilder(this.entity)
-        .withSearch(this.query)
-        .orderBy("Search")
-        .page(this.pageNumber, this.pageSize)
-        .build();
-
+      let url = this.getURL();
       return http
         .get(url)
         .then(result => {

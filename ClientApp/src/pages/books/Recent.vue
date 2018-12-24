@@ -15,49 +15,24 @@
 </template>
 
 <script>
-import http from "../../utils/http.js";
+import indexMixin from "../../mixins/index";
 import URLBuilder from "../../utils/urlBuilder";
 
 export default {
   name: "books-recent-page",
+  mixins: [indexMixin],
   data() {
     return {
-      loadingDelay: 500,
-      pageSize: 50,
-      items: {},
+      entity: "books",
     };
   },
-  created() {
-    this.load();
-  },
-  watch: {
-    $route() {
-      this.load();
-    },
-  },
   methods: {
-    load() {
-      let timeout = setTimeout(() => {
-        this.$store.commit("app/loading");
-      }, this.loadingDelay);
-
-      let url = new URLBuilder("books")
+    getURL() {
+      return new URLBuilder("books")
         .expand("Series,Authors,Genres")
         .orderBy("UpdateDate desc,Search")
         .top(this.pageSize)
         .build();
-
-      return http
-        .get(url)
-        .then(result => {
-          clearTimeout(timeout);
-          this.items = result.data;
-          this.$store.commit(`app/${this.items.value.length == 0 ? "noData" : "loaded"}`);
-        })
-        .catch(() => {
-          clearTimeout(timeout);
-          this.$store.commit("app/error");
-        });
     },
   },
 };
