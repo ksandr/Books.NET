@@ -27,6 +27,7 @@
 
 <script>
 import http from "../../utils/http.js";
+import URLBuilder from "../../utils/urlBuilder";
 
 export default {
   name: "books-details-page",
@@ -59,8 +60,9 @@ export default {
         this.$store.commit("app/loading");
       }, this.loadingDelay);
 
+      let url = new URLBuilder(`books(${this.id})`).expand("Series,Authors,Genres").build();
       return http
-        .get(`/odata/books(${this.id})?$expand=Series,Authors,Genres`)
+        .get(url)
         .then(result => {
           this.item = result.data;
 

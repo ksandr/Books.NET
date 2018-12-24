@@ -16,6 +16,7 @@
 
 <script>
 import http from "../../utils/http.js";
+import URLBuilder from "../../utils/urlBuilder";
 
 export default {
   name: "books-recent-page",
@@ -40,8 +41,14 @@ export default {
         this.$store.commit("app/loading");
       }, this.loadingDelay);
 
+      let url = new URLBuilder("books")
+        .expand("Series,Authors,Genres")
+        .orderBy("UpdateDate desc,Search")
+        .top(this.pageSize)
+        .build();
+
       return http
-        .get(`/odata/books?$expand=Series,Authors,Genres&$orderby=UpdateDate desc,Search&&$top=${this.pageSize}`)
+        .get(url)
         .then(result => {
           clearTimeout(timeout);
           this.items = result.data;

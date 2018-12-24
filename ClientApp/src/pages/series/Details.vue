@@ -36,6 +36,7 @@
 <script>
 import {mapGetters} from "vuex";
 import http from "../../utils/http.js";
+import URLBuilder from "../../utils/urlBuilder";
 
 export default {
   name: "series-details-page",
@@ -70,12 +71,18 @@ export default {
         this.$store.commit("app/loading");
       }, this.loadingDelay);
 
+      let url = new URLBuilder(`series(${this.id})`).build();
+
       return http
-        .get(`/odata/series(${this.id})`)
+        .get(url)
         .then(result => {
           this.item = result.data;
 
-          return http.get(`/odata/series(${this.id})/books.books?$expand=Series,Authors,Genres&$orderby=SeqNumber,Search,UpdateDate`);
+          let url = new URLBuilder(`series(${this.id})/books.books`)
+            .expand("Series,Authors,Genres")
+            .orderBy("SeqNumber,Search,UpdateDate")
+            .build();
+          return http.get(url);
         })
         .then(result => {
           this.item.Books = result.data.value;

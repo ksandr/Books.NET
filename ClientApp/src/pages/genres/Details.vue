@@ -49,6 +49,7 @@
 <script>
 import {mapGetters} from "vuex";
 import http from "../../utils/http.js";
+import URLBuilder from "../../utils/urlBuilder";
 
 export default {
   name: "series-details-page",
@@ -100,21 +101,19 @@ export default {
         this.$store.commit("app/loading");
       }, this.loadingDelay);
 
-      let baseURL = `/odata/genres(${this.id})`;
-
+      let url = new URLBuilder(`genres(${this.id})`).build();
       return http
-        .get(baseURL)
+        .get(url)
         .then(result => {
           this.item = result.data;
 
-          let url =
-            `${baseURL}/books.books` + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
-
-          return http.get(
-            `${url}$expand=Series,Authors,Genres&$orderby=Search&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${
-              this.pageSize
-            }&$count=true`
-          );
+          let url = new URLBuilder(`genres(${this.id})/books.books`)
+            .expand("Series,Authors,Genres")
+            .withSearch(this.query)
+            .orderBy("Search")
+            .page(this.pageNumber, this.pageSize)
+            .build();
+          return http.get(url);
         })
         .then(result => {
           this.books = result.data;

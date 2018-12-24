@@ -28,6 +28,7 @@
 
 <script>
 import http from "../../utils/http.js";
+import URLBuilder from "../../utils/urlBuilder";
 
 export default {
   name: "books-index-page",
@@ -71,14 +72,15 @@ export default {
         this.$store.commit("app/loading");
       }, this.loadingDelay);
 
-      let url = "/odata/books" + (this.query ? `?$filter=contains(Search, '${encodeURIComponent(this.query.toUpperCase())}')&` : "?");
+      let url = new URLBuilder("books")
+        .expand("Series,Authors,Genres")
+        .withSearch(this.query)
+        .orderBy("Search")
+        .page(this.pageNumber, this.pageSize)
+        .build();
 
       return http
-        .get(
-          `${url}$expand=Series,Authors,Genres&$orderby=Search&$skip=${this.pageSize * (this.pageNumber - 1)}&$top=${
-            this.pageSize
-          }&$count=true`
-        )
+        .get(url)
         .then(result => {
           clearTimeout(timeout);
           this.items = result.data;
