@@ -1,7 +1,9 @@
+import baseMixin from "./base";
 import http from "../utils/http.js";
 import URLBuilder from "../utils/urlBuilder";
 
 export default {
+  mixins: [baseMixin],
   props: {
     page: {
       type: [Number, String],
@@ -11,7 +13,6 @@ export default {
   },
   data() {
     return {
-      loadingDelay: 500,
       pageSize: 50,
       items: {},
       query: this.$route.query.q ? decodeURIComponent(this.$route.query.q) : null,
@@ -28,14 +29,6 @@ export default {
       return Math.ceil(this.totalItems / this.pageSize);
     },
   },
-  created() {
-    this.load();
-  },
-  watch: {
-    $route() {
-      this.load();
-    },
-  },
   methods: {
     getURL() {
       return new URLBuilder(this.entity)
@@ -44,23 +37,12 @@ export default {
         .page(this.pageNumber, this.pageSize)
         .build();
     },
-    load() {
-      let timeout = setTimeout(() => {
-        this.$store.commit("app/loading");
-      }, this.loadingDelay);
-
+    doLoad() {
       let url = this.getURL();
-      return http
-        .get(url)
-        .then(result => {
-          clearTimeout(timeout);
-          this.items = result.data;
-          this.$store.commit(`app/${this.items.value.length == 0 ? "noData" : "loaded"}`);
-        })
-        .catch(() => {
-          clearTimeout(timeout);
-          this.$store.commit("app/error");
-        });
+      return http.get(url).then(result => {
+        this.items = result.data;
+        this.$store.commit(`app/${this.items.value.length == 0 ? "noData" : "loaded"}`);
+      });
     },
     pageLink(page) {
       return {

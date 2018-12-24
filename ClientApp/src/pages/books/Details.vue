@@ -26,40 +26,22 @@
 </template>
 
 <script>
-import http from "../../utils/http.js";
+import detailsMixin from "../../mixins/details";
+import http from "../../utils/http";
 import URLBuilder from "../../utils/urlBuilder";
 
 export default {
   name: "books-details-page",
-  props: {
-    id: {
-      type: [Number, String],
-      required: true,
-    },
-  },
+  mixins: [detailsMixin],
   data() {
     return {
-      loadingDelay: 500,
-      item: {},
       details: {
         Cover: {},
       },
     };
   },
-  created() {
-    this.load();
-  },
-  watch: {
-    $route() {
-      this.load();
-    },
-  },
   methods: {
-    load() {
-      let timeout = setTimeout(() => {
-        this.$store.commit("app/loading");
-      }, this.loadingDelay);
-
+    doLoad() {
       let url = new URLBuilder(`books(${this.id})`).expand("Series,Authors,Genres").build();
       return http
         .get(url)
@@ -70,18 +52,10 @@ export default {
         })
         .then(result => {
           this.details = result.data;
-          return null;
-        })
-        .then(() => {
-          clearTimeout(timeout);
           this.$store.commit("app/loaded");
-        })
-        .catch(() => {
-          clearTimeout(timeout);
-          this.$store.commit("app/error");
+          return null;
         });
     },
   },
 };
 </script>
-
