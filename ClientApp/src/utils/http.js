@@ -1,18 +1,34 @@
 import axios from "axios";
 import indicator from "./loading-indicator";
+import store from "../store";
 
 //import delay from "./delay";
 
 let http = axios.create({headers: {Pragma: "no-cache"}});
 
+function start() {
+  if (store.state.error) {
+    store.commit("clearError", null);
+  }
+
+  indicator.start();
+}
+
+function done(error) {
+  if (error) {
+    store.commit("error", error);
+  }
+
+  indicator.stop();
+}
+
 http.interceptors.request.use(
   config => {
-    indicator.start();
-
+    start();
     return config;
   },
   error => {
-    indicator.stop();
+    done(error);
 
     return Promise.reject(error);
   }
@@ -20,7 +36,7 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   response => {
-    indicator.stop();
+    done();
     return response;
 
     // return delay(() => {
@@ -29,7 +45,7 @@ http.interceptors.response.use(
     // }, 2000);
   },
   error => {
-    indicator.stop();
+    done(error);
 
     return Promise.reject(error);
   }

@@ -5,102 +5,44 @@
         <div class="col-sm-12">
           <h1>
             Авторы
-            <small v-if="state == 'loaded'"
+            <small v-if="isLoaded"
                    class="text-muted">{{ item.LastName }} {{ item.FirstName }} {{ item.MiddleName }}</small>
           </h1>
         </div>
       </div>
-      <div v-if="state == 'loading'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="info">
-            Загрузка...
-          </app-alert>
-        </div>
-      </div>
-      <div v-if="state == 'loaded'"
-           class="row">
-        <div class="col-sm-12">
-          <app-book-list :items="item.Books"></app-book-list>
-        </div>
-      </div>
-      <div v-if="state == 'error'"
-           class="row">
-        <div class="col-sm-12">
-          <app-alert variant="danger">
-            Ошибка
-          </app-alert>
-        </div>
-      </div>
-      <template v-if="state != 'none' && state != 'loading'">
-        <div class="row">
-          <div class="col">
-            <hr>
+      <app-loading></app-loading>
+      <app-error></app-error>
+      <app-content>
+        <app-book-list :items="items"></app-book-list>
+      </app-content>
+      <app-navigation>
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <hr>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <app-back-button block></app-back-button>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-sm-6 col-md-4 col-lg-3">
-            <app-back-button block></app-back-button>
-          </div>
-        </div>
-      </template>
+      </app-navigation>
     </div>
   </div>
 </template>
 
 <script>
-import http from "../../utils/http.js";
+import detailsMixin from "../../mixins/details";
 
 export default {
-  name: "series-details-page",
-  props: {
-    id: {
-      type: [Number, String],
-      required: true,
-    },
-  },
+  name: "authors-details-page",
+  mixins: [detailsMixin],
   data() {
     return {
-      loadingDelay: 500,
-      state: "none",
-      item: null,
+      entity: "authors",
     };
-  },
-  created() {
-    this.load();
-  },
-  watch: {
-    $route() {
-      this.load();
-    },
-  },
-  methods: {
-    load() {
-      let timeout = setTimeout(() => {
-        this.state = "loading";
-      }, this.loadingDelay);
-
-      return http
-        .get(`/odata/authors(${this.id})`)
-        .then(result => {
-          this.item = result.data;
-
-          return http.get(`/odata/authors(${this.id})/books.books?$expand=Series,Authors,Genres&$orderby=SeqNumber,Search,UpdateDate`);
-        })
-        .then(result => {
-          this.item.Books = result.data.value;
-          return null;
-        })
-        .then(() => {
-          clearTimeout(timeout);
-          this.state = "loaded";
-        })
-        .catch(e => {
-          clearTimeout(timeout);
-          this.error = e;
-          this.state = "error";
-        });
-    },
   },
 };
 </script>

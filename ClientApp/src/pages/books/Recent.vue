@@ -5,78 +5,34 @@
         <h1>Новые книги</h1>
       </div>
     </div>
-    <div v-if="state == 'loading'"
-         class="row">
-      <div class="col-sm-12">
-        <app-alert variant="info">
-          Загрузка...
-        </app-alert>
-      </div>
-    </div>
-    <div v-if="state == 'loaded'"
-         class="row">
-      <div class="col-sm-12">
-        <app-book-list :items="items.value"></app-book-list>
-      </div>
-    </div>
-    <div v-if="state == 'no-data'"
-         class="row">
-      <div class="col-sm-12">
-        <app-alert variant="warning">
-          Нет даных
-        </app-alert>
-      </div>
-    </div>
-    <div v-if="state == 'error'"
-         class="row">
-      <div class="col-sm-12">
-        <app-alert variant="danger">
-          Ошибка
-        </app-alert>
-      </div>
-    </div>
+    <app-error></app-error>
+    <app-loading></app-loading>
+    <app-no-data></app-no-data>
+    <app-content>
+      <app-book-list :items="items.value"></app-book-list>
+    </app-content>
   </div>
 </template>
 
 <script>
-import http from "../../utils/http.js";
+import indexMixin from "../../mixins/index";
+import URLBuilder from "../../utils/urlBuilder";
 
 export default {
   name: "books-recent-page",
+  mixins: [indexMixin],
   data() {
     return {
-      loadingDelay: 500,
-      pageSize: 50,
-      state: "none",
-      items: null,
+      entity: "books",
     };
   },
-  created() {
-    this.load();
-  },
-  watch: {
-    $route() {
-      this.load();
-    },
-  },
   methods: {
-    load() {
-      let timeout = setTimeout(() => {
-        this.state = "loading";
-      }, this.loadingDelay);
-
-      return http
-        .get(`/odata/books?$expand=Series,Authors,Genres&$orderby=UpdateDate desc,Search&&$top=${this.pageSize}`)
-        .then(result => {
-          clearTimeout(timeout);
-          this.items = result.data;
-          this.state = this.items.value.length == 0 ? "no-data" : "loaded";
-        })
-        .catch(e => {
-          clearTimeout(timeout);
-          this.error = e;
-          this.state = "error";
-        });
+    getURL() {
+      return new URLBuilder("books")
+        .expand("Series,Authors,Genres")
+        .orderBy("UpdateDate desc,Search")
+        .top(this.pageSize)
+        .build();
     },
   },
 };
