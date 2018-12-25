@@ -1,0 +1,13 @@
+.git*
+.vs*
+.vscode*
+App_Data/*
+!App_Data/genres_fb2.glst
+bin*
+ClientApp/dist*
+ClientApp/node_modules*
+obj*
+publish*
+appsettings.Local.json
+*.csproj.user
+*.md
