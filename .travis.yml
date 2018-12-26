@@ -1,0 +1,17 @@
+language: csharp
+sudo: required
+mono: none
+dotnet: 2.2
+dist: xenial
+
+before_install:
+  - chmod +x ./.build/*.sh
+
+install:
+  - curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
+  - sudo apt-get install -y nodejs
+
+before_script:
+  - dotnet restore
+
+script: ./.build/travis.sh
