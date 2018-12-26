@@ -14,4 +14,18 @@ install:
 before_script:
   - dotnet restore
 
-script: ./.build/travis.sh
+script: "./.build/travis.sh"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: 2xO7XVaOAGru9GjadBfSR50PqYH8rMMjcSJWwiR9rIXoFKA8Dj/hQuThI2oRhXgm5/ftEcb6DCfbIZAhNvipG79p3wJ4ETD8KThd4H+NjS9hnRpmXeyqVJKWw0Q6K427ryM6FIyrjmpGIGSmKk0Bs+MmE/c1YXlG/vR/bHw+VBNpe+3hxEof9G/PRUfH2uLSd6N5uENoAtOqq5Q+6DfVBFJRbvj6Xe0V6Y+P5e2qMd7D1PADtZ5RIzIL5L7GBrOJcmJRlrsNg4knKz5HOucFrDu6gRsoLL0RZ1v+mb5eXAYWp7+Chvr1//6AqrfSabSxr3mfMrlFTCY3p9HnR0e/LdvrVHgcJZ+sM27r5cvwjleJ2KrySYANgDivhXqEVZiTr1uQhz56ITe6W+r6rXcYLvmeCTvvLn+i8i5nB5+kEZlt2E6rtqIZgWxaF7cwbUbTKAGO9p19tcdiPIgHRQN/og8R5oAdIu+cxzmyNP05B/+/2J6+uebvSlHu/2G1QigiXSm31bBSAyMY9avTJx5mH8nl98CXCHlQitxxPi9JfaUYepr6lYRWxSoEvbCHBuLFb0oQF+BcO45PSYiIbu1umhfCgyuNrEK7sBc7+EL8YkAk8yHBOqvtZDhPgsWy9mqNbHbkqNDoTYrEHmauNhO85Gx4NYZXp5M9gEk4R1OjetE=
+  file:
+    - publish/Books.NET_${TRAVIS_TAG}_win-x64.zip
+    - publish/Books.NET_${TRAVIS_TAG}_linux-x64.tar.gz
+    - publish/Books.NET_${TRAVIS_TAG}_linux-arm.tar.gz
+  skip_cleanup: true
+  on:
+    repo: ksandr/Books.NET
+    branch: master
+    tags: true

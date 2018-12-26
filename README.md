@@ -2,7 +2,7 @@
 
 Web-клиент для просмотра архивов библиотек на движке Либрусек (Либрусек , Флибуста и т.д.)
 
-[![Travis](https://img.shields.io/travis/ksandr/Books.NET.svg)](https://travis-ci.org/ksandr/Books.NET)
+[![License](https://img.shields.io/github/license/ksandr/Books.NET.svg)](https://github.com/ksandr/Books.NET/blob/master/LICENSE) [![Build Status](https://img.shields.io/travis/ksandr/Books.NET.svg)](https://travis-ci.org/ksandr/Books.NET) [![Download](https://img.shields.io/github/downloads/ksandr/Books.NET/total.svg)](https://github.com/ksandr/Books.NET/releases)
 
 # Сборка
 
