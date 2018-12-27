@@ -1,6 +1,8 @@
 #!/bin/bash
 
 runtime=$1
+skipNpm=$2
+
 if [ -z "$runtime" ]
 then
   echo -e "\e[31mError: No runtime provided!\e[0m" 1>&2
@@ -11,13 +13,18 @@ then
   exit -1
 fi
 
+if [ -z "$skipNpm" ]
+then
+  skipNpm=false
+fi
+
 wd=$(dirname "$0")
 
 if [ -d "$wd/../publish/$runtime" ]; then
   rm -rf $wd/../publish/$runtime
 fi
 
-dotnet publish $wd/../Books.csproj -c Release -r $runtime -o publish/$runtime --self-contained
+dotnet publish $wd/../Books.csproj -c Release -r $runtime -o publish/$runtime -p:SkipNpm=$skipNpm --self-contained
 code=$?
 if [ $code -ne 0 ]
 then
