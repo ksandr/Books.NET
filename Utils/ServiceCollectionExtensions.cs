@@ -47,8 +47,7 @@ namespace Ksandr.Books.Utils
                 throw new ArgumentNullException(nameof(config));
 
             string databaseFile = config.GetSection("AppConfig:DatabaseFile").Get<string>();
-            string connectionString = $"Data Source={Path.GetFullPath(databaseFile)}";
-
+            string connectionString = $"Data Source=file:{Path.GetFullPath(databaseFile)}?_journal_mode=WAL";
             collection.AddDbContext<BooksContext>(builder => builder.UseSqlite(connectionString));
 
             return collection;

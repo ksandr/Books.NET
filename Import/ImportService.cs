@@ -31,7 +31,7 @@ namespace Ksandr.Books.Import
 
         public async Task StartAsync(string inpxFile, string genresFile, IEnumerable<string> languages, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Import parameters: inpxFile={0}, genresFile={1} ", inpxFile, genresFile);
+            _logger.LogInformation("Import parameters:\n\tinpxFile={0}\n\tgenresFile={1} ", inpxFile, genresFile);
 
             if (!File.Exists(inpxFile))
                 throw new FileNotFoundException($"INPX file '{inpxFile}' not found");
@@ -95,21 +95,17 @@ namespace Ksandr.Books.Import
                 reader.SkipDeleted = true;
                 reader.Languages = languages;
 
-                string inpName = "";
+                int i = 0;
                 foreach (InpRecord inp in reader.ReadInpx(cancellationToken))
                 {
-                    if (inp.Folder != inpName)
-                    {
-                        if (inpName != "")
-                            await _db.SaveChangesAsync();
-
-                        inpName = inp.Folder;
-                        _logger.LogInformation("Loading inp {0}", inp.Folder);
-                    }
-
                     await ParseInp(inp);
+
+                    i++;
+                    if (i % 10000 == 0)
+                        _logger.LogInformation("{0} books processed...", i);
                 }
 
+                _logger.LogInformation("{0} books processed...", i);
                 await _db.SaveChangesAsync();
             }
         }
