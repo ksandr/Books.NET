@@ -44,7 +44,7 @@ namespace Ksandr.Books
             task.Wait();
 
 #if DEBUG
-            Console.WriteLine("Press <Enter> to exit...");
+            Console.Write("Press <Enter> to exit...");
             Console.ReadLine();
 #endif
             return 0;
@@ -55,25 +55,22 @@ namespace Ksandr.Books
             if (force)
             {
                 Print(ConsoleColor.Yellow,
-                    "Force database recreation.",
-                    "Hope you know what you are doing...");
+                    "Force database recreation.\nHope you know what you are doing...\n");
                 return true;
             }
 
-            Print(ConsoleColor.Red, "Database will be recreated and all data will be deleted",
-            "Are you shure you want to continue? [y/n]?");
+            Print(ConsoleColor.Red, "Database will be recreated and all data will be deleted.\nContinue? [y/n]: ");
             string answer = Console.ReadLine();
 
             return string.Equals(answer, "y", StringComparison.InvariantCultureIgnoreCase);
         }
 
-        static void Print(ConsoleColor color, params string[] messages)
+        static void Print(ConsoleColor color, string message)
         {
             ConsoleColor oldColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
 
-            foreach (string message in messages)
-                Console.WriteLine(message);
+            Console.Write(message);
 
             Console.ForegroundColor = oldColor;
         }
