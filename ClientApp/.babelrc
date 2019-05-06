@@ -1,21 +1,14 @@
 ﻿{
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
-        "targets": "last 2 versions"
+        "modules": false,
+        "loose": true,
+        "useBuiltIns": "entry",
+        "corejs": 3
       }
     ]
   ],
-  "plugins": [
-    "syntax-dynamic-import",
-    "transform-object-rest-spread",
-    [
-      "transform-runtime",
-      {
-        "polyfill": false,
-        "regenerator": true
-      }
-    ]
-  ]
+  "plugins": ["@babel/plugin-syntax-dynamic-import", "@babel/plugin-syntax-object-rest-spread", "@babel/plugin-transform-runtime"]
 }

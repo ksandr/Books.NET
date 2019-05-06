@@ -1,9 +1,9 @@
 ﻿{
-    "env": {
-        "node": true,
-        "jquery": true
-    },
-    "extends": ["eslint:recommended", "plugin:vue/essential"],
+  "env": {
+    "node": true,
+    "jquery": true
+  },
+  "extends": ["eslint:recommended", "plugin:vue/essential"],
   "rules": {
     "array-callback-return": "error",
     "block-scoped-var": "error",
@@ -14,13 +14,10 @@
     "no-implicit-globals": "error",
     "vue/html-self-closing": "off"
   },
-    "parserOptions": {
-        "parser": "babel-eslint",
-        "ecmaVersion": 2017
-    },
-    "plugins": ["import"],
-    "globals": {
-        "moment": true,
-        "import": true
-    }
+  "parserOptions": { "parser": "babel-eslint" },
+  "plugins": ["import"],
+  "globals": {
+    "moment": true,
+    "import": true
+  }
 }
