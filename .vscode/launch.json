@@ -46,9 +46,13 @@
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
       "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/Books.dll",
-      "args": ["import", "--inpx", "App_Data/librusec_local_fb2.inpx", "--force"],
+      "args": ["import", "--inpx", "App_Data/librusec_local_fb2.inpx"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
+      "logging": {
+        "moduleLoad": false
+      },
+      "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
