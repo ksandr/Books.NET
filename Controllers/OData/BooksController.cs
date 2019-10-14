@@ -30,20 +30,20 @@ namespace Ksandr.Books.Controllers.OData
         [EnableQuery]
         public IActionResult Get()
         {
-            return Ok(db.Books);
+            return Ok(db.Books.AsNoTracking());
         }
 
         [EnableQuery]
         public IActionResult Get(int key)
         {
-            return Ok(db.Books.Include(x => x.Series).Include(x => x.Authors).Include(x => x.Genres).FirstOrDefault(x => x.Id == key));
+            return Ok(db.Books.AsNoTracking().Include(x => x.Series).Include(x => x.Authors).Include(x => x.Genres).FirstOrDefault(x => x.Id == key));
         }
 
         public IActionResult Download(int key)
         {
             bool returnZip = Request.Query.Any(x => x.Key == "zip");
 
-            Book book = db.Books.SingleOrDefault(x => x.Id == key);
+            Book book = db.Books.AsNoTracking().SingleOrDefault(x => x.Id == key);
             if (book == null)
                 return NotFound();
 
@@ -112,7 +112,7 @@ namespace Ksandr.Books.Controllers.OData
         public IActionResult Details(int key)
         {
 
-            Book book = db.Books.SingleOrDefault(x => x.Id == key);
+            Book book = db.Books.AsNoTracking().SingleOrDefault(x => x.Id == key);
             if (book == null)
                 return NotFound();
 
