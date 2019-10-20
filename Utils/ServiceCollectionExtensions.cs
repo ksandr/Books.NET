@@ -26,14 +26,20 @@ namespace Ksandr.Books.Utils
 
             if (preserveStaticLogger)
             {
-                collection.AddSingleton<ILoggerFactory>(services => new SerilogLoggerFactory(logger, true));
+                collection.AddLogging(builder =>
+                {
+                    builder.AddSerilog(logger, true);
+                });
             }
             else
             {
                 // Passing a `null` logger to `SerilogLoggerFactory` results in disposal via
                 // `Log.CloseAndFlush()`, which additionally replaces the static logger with a no-op.
                 Log.Logger = logger;
-                collection.AddSingleton<ILoggerFactory>(services => new SerilogLoggerFactory(null, true));
+                collection.AddLogging(builder =>
+                {
+                    builder.AddSerilog(null, true);
+                });
             }
 
             return collection;

@@ -2,6 +2,7 @@
 using Ksandr.Books.Database;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Ksandr.Books.Controllers.OData
@@ -15,19 +16,19 @@ namespace Ksandr.Books.Controllers.OData
         [EnableQuery]
         public IActionResult Get()
         {
-            return Ok(db.Series);
+            return Ok(db.Series.AsNoTracking());
         }
 
         [EnableQuery]
         public IActionResult Get(int key)
         {
-            return Ok(db.Series.FirstOrDefault(x => x.Id == key));
+            return Ok(db.Series.AsNoTracking().FirstOrDefault(x => x.Id == key));
         }
 
         [EnableQuery]
         public IActionResult Books(int key)
         {
-            return Ok(db.Books.Where(x => x.Series.Id == key));
+            return Ok(db.Books.AsNoTracking().Where(x => x.Series.Id == key));
         }
     }
 }

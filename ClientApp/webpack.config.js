@@ -1,7 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -24,6 +24,7 @@ const appVersion = require("./webpack/app-version");
 
 module.exports = (env, argv) => {
   env = env || {};
+  argv = argv || {};
 
   const mode = argv.mode || "development";
 
@@ -36,13 +37,13 @@ module.exports = (env, argv) => {
     context: __dirname,
 
     entry: {
-      index: "./src/index.js"
+      index: "./src/index.js",
     },
 
     output: {
       path: path.resolve(__dirname, "./dist"),
       publicPath: "/",
-      filename: DEBUG ? "js/[name].[hash].js" : "js/[name].[chunkhash].js"
+      filename: DEBUG ? "js/[name].[hash].js" : "js/[name].[chunkhash].js",
     },
     devtool: DEBUG ? "source-map" : false,
 
@@ -50,45 +51,45 @@ module.exports = (env, argv) => {
 
     resolve: {
       extensions: [".js", ".vue"],
-      modules: ["node_modules"]
+      modules: ["node_modules"],
     },
 
     module: {
-      rules: [vueRule(), jsRule([/node_modules/]), cssRule(DEBUG), scssRule(DEBUG), imagesRule(), fontsRule()]
+      rules: [vueRule(), jsRule([/node_modules/]), cssRule(DEBUG), scssRule(DEBUG), imagesRule(), fontsRule()],
     },
 
     plugins: [
       // process.env.NODE_ENV value is set by Webpack according to config.mode
       webpackDefinePlugin({
-        "process.env.APP_VERSION": appVersion(APP_ENV)
+        "process.env.APP_VERSION": appVersion(APP_ENV),
       }),
 
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
       new webpack.ProvidePlugin({
         $: "jquery",
-        jQuery: "jquery"
+        jQuery: "jquery",
       }),
 
       new VueLoaderPlugin(),
 
       htmlWebpackPlugin("./src/index.html", "index.html", DEBUG),
 
-      new CopyWebpackPlugin([{ from: "src/assets", to: "assets" }]),
+      new CopyWebpackPlugin([{from: "src/assets", to: "assets"}]),
 
       ...(() =>
         DEBUG
           ? [
               new webpack.HotModuleReplacementPlugin(),
-              new CompressionPlugin({ algorithm: "gzip", cache: true, minRatio: 1.0, threshold: 20, test: /\.(css|html|js)$/ })
+              new CompressionPlugin({algorithm: "gzip", cache: true, minRatio: 1.0, threshold: 20, test: /\.(css|html|js)$/}),
             ]
           : [
               new CleanWebpackPlugin(),
-              new MiniCssExtractPlugin({ filename: "css/[name].[chunkhash].css" }),
+              new MiniCssExtractPlugin({filename: "css/[name].[chunkhash].css"}),
               new OptimizeCSSAssetsPlugin(),
-              new CompressionPlugin({ algorithm: "gzip", cache: true, minRatio: 1.0, threshold: 20, test: /\.(css|html|js)$/ })
-            ])()
-    ]
+              new CompressionPlugin({algorithm: "gzip", cache: true, minRatio: 1.0, threshold: 20, test: /\.(css|html|js)$/}),
+            ])(),
+    ],
   };
 
   return config;

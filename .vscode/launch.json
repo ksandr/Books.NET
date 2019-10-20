@@ -3,18 +3,20 @@
   // Use hover for the description of the existing attributes
   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
   "version": "0.2.0",
-  "configurations": [{
+  "configurations": [
+    {
       "name": "Books (web)",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
       "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/Books.dll",
-      "args": [
-        "web"
-      ],
+      "args": ["web"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
+      "logging": {
+        "moduleLoad": false
+      },
       "internalConsoleOptions": "openOnSessionStart",
       "launchBrowser": {
         "enabled": true,
@@ -44,14 +46,13 @@
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
       "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/Books.dll",
-      "args": [
-        "import",
-        "--inpx",
-        "App_Data/librusec_local_fb2.inpx",
-        "--force"
-      ],
+      "args": ["import", "--inpx", "App_Data/librusec_local_fb2.inpx"],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
+      "logging": {
+        "moduleLoad": false
+      },
+      "console": "integratedTerminal",
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
@@ -59,6 +60,6 @@
       "type": "coreclr",
       "request": "attach",
       "processId": "${command:pickProcess}"
-    },
+    }
   ]
 }

@@ -17,7 +17,7 @@ namespace Ksandr.Books
             if (!Confirm(opts.Force))
                 return -1;
 
-            string environmentName = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
+            string environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
             IConfigurationRoot config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -59,7 +59,7 @@ namespace Ksandr.Books
                 return true;
             }
 
-            Print(ConsoleColor.Red, "Database will be recreated and all data will be deleted.\nContinue? [y/n]: ");
+            Print(ConsoleColor.Red, "Database will be recreated and all data will be deleted.\nContinue? [y/N]: ");
             string answer = Console.ReadLine();
 
             return string.Equals(answer, "y", StringComparison.InvariantCultureIgnoreCase);
