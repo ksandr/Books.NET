@@ -24,7 +24,7 @@ if [ -d "$wd/../publish/$runtime" ]; then
   rm -rf $wd/../publish/$runtime
 fi
 
-dotnet publish $wd/../Books.csproj -c Release -r $runtime -o publish/$runtime -p:SkipNpm=$skipNpm --self-contained
+dotnet publish $wd/../Books/Books.csproj -c Release -r $runtime -o ../publish/$runtime -p:SkipNpm=$skipNpm --self-contained
 code=$?
 if [ $code -ne 0 ]
 then

@@ -15,7 +15,7 @@ before_script:
   - dotnet restore
 
 script: "./.build/travis.sh"
-
+                                                                                                    6
 deploy:
   provider: releases
   api_key:

@@ -1,6 +1,6 @@
 wd=$(dirname "$0")
 
-cd $wd/../ClientApp
+cd $wd/../Books/ClientApp
 npm install
 npm run build
 code=$?
@@ -9,7 +9,7 @@ code=$?
     exit $code
   fi
 
-cd ../.build
+cd ../../.build
 runtimes=(win-x64 linux-x64 linux-arm)
 for runtime in ${runtimes[*]}
 do

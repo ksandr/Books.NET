@@ -17,7 +17,7 @@ IF EXIST %WD%\..\publish\%RUNTIME% (
   RMDIR %WD%\..\publish\%RUNTIME% /S /Q
 )
 
-dotnet publish %WD%\..\Books.csproj -c Release -r %RUNTIME% -o publish\%RUNTIME% --self-contained
+dotnet publish %WD%\..\Books\Books.csproj -c Release -r %RUNTIME% -o ..\publish\%RUNTIME% --self-contained
 if ERRORLEVEL 1 (
    EXIT /b %ERRORLEVEL%
 )
