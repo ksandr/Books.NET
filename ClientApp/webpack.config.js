@@ -75,7 +75,7 @@ module.exports = (env, argv) => {
 
       htmlWebpackPlugin("./src/index.html", "index.html", DEBUG),
 
-      new CopyWebpackPlugin([{from: "src/assets", to: "assets"}]),
+      new CopyWebpackPlugin({patterns: [{from: "src/assets", to: "assets"}]}),
 
       ...(() =>
         DEBUG
