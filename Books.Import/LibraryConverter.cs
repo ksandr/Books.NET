@@ -11,11 +11,11 @@ namespace Ksandr.Books.Import
 {
     public class LibraryConverter
     {
-        private readonly GenresReader2 _genresReader;
-        private readonly BooksReader2 _booksReader;
+        private readonly GenresReader _genresReader;
+        private readonly BooksReader _booksReader;
         private readonly ILogger<LibraryConverter> _logger;
 
-        public LibraryConverter(GenresReader2 genresReader, BooksReader2 booksReader, ILogger<LibraryConverter> logger)
+        public LibraryConverter(GenresReader genresReader, BooksReader booksReader, ILogger<LibraryConverter> logger)
         {
             _genresReader = genresReader ?? throw new ArgumentNullException(nameof(genresReader));
             _booksReader = booksReader ?? throw new ArgumentNullException(nameof(booksReader));
@@ -40,9 +40,9 @@ namespace Ksandr.Books.Import
             if (cancellationToken.IsCancellationRequested)
                 return;
 
-            GenresCache2 genresCache = new GenresCache2(_genresReader.Read(cancellationToken));
-            AuthorsCache2 authorsCache = new AuthorsCache2();
-            SeriesCache2 seriesCache = new SeriesCache2();
+            GenresCache genresCache = new GenresCache(_genresReader.Read(cancellationToken));
+            AuthorsCache authorsCache = new AuthorsCache();
+            SeriesCache seriesCache = new SeriesCache();
 
             await db.EnsureSchemaAsync();
             await db.ClearAsync();

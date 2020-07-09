@@ -3,16 +3,20 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Ksandr.Books.Import;
+using Ksandr.Books.Import.Readers;
 using Ksandr.Books.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
+
+using SqliteDatabase = Ksandr.Books.Import.Sqlite.Database;
 
 namespace Ksandr.Books
 {
     public partial class Program
     {
-        static int RunImport(ImportOptions opts)
+        static int RunImport2(ImportOptions opts)
         {
             if (!Confirm(opts.Force))
                 return -1;
@@ -29,18 +33,23 @@ namespace Ksandr.Books
 
             ServiceProvider serviceProvider = new ServiceCollection()
                 .UseSerilog(configuration => configuration.ReadFrom.Configuration(config))
-                .AddBooksContext(config)
-                .AddTransient<ImportService>()
                 .BuildServiceProvider();
 
-            ImportService importService = serviceProvider.GetRequiredService<ImportService>();
-
             string genresFile = config.GetSection("AppConfig:GenresFile").Get<string>();
-            CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+            GenresReader genresReader = new GenresReader(genresFile) { Fb2Only = true };
 
             string[] languages = config.GetSection("AppConfig:Languages").Get<string[]>() ?? new string[] { };
+            BooksReader booksReader = new BooksReader(opts.InpxFile) { Languages = languages, SkipDeleted = true };
 
-            Task task = importService.StartAsync(opts.InpxFile, genresFile, languages, cancelTokenSource.Token);
+            string databaseFile = config.GetSection("AppConfig:DatabaseFile").Get<string>();
+            string connectionString = $"Data Source=file:{Path.GetFullPath(databaseFile)}?_journal_mode=WAL";
+            IDatabase db = new SqliteDatabase(connectionString);
+
+            ILogger<LibraryConverter> logger = serviceProvider.GetRequiredService<ILogger<LibraryConverter>>();
+            LibraryConverter converter = new LibraryConverter(genresReader, booksReader, logger);
+
+            CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+            Task task = converter.ConvertAsync(db, cancelTokenSource.Token);
             task.Wait();
 
 #if DEBUG

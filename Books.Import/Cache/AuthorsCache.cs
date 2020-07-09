@@ -4,11 +4,11 @@ using Ksandr.Books.Import.Entities;
 
 namespace Ksandr.Books.Import.Cache
 {
-    public class AuthorsCache2
+    public class AuthorsCache
     {
         private readonly Dictionary<string, Author> _cache;
 
-        public AuthorsCache2()
+        public AuthorsCache()
         {
             _cache = new Dictionary<string, Author>();
         }

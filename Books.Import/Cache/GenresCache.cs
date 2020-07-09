@@ -4,12 +4,11 @@ using Ksandr.Books.Import.Entities;
 
 namespace Ksandr.Books.Import.Cache
 {
-    //TODO: Переименовать в GenresCache
-    public class GenresCache2
+    public class GenresCache
     {
         private readonly Dictionary<string, Genre> _cache;
 
-        public GenresCache2(IEnumerable<Genre> values)
+        public GenresCache(IEnumerable<Genre> values)
         {
             if (values == null)
                 throw new ArgumentNullException(nameof(values));

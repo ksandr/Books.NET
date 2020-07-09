@@ -6,12 +6,12 @@ using Ksandr.Books.Import.Entities;
 
 namespace Ksandr.Books.Import.Readers
 {
-    public class GenresReader2 : IDisposable
+    public class GenresReader : IDisposable
     {
         private readonly StreamReader _reader;
         private readonly Stream _stream;
 
-        public GenresReader2(Stream stream)
+        public GenresReader(Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
@@ -20,7 +20,7 @@ namespace Ksandr.Books.Import.Readers
             _reader = new StreamReader(stream);
         }
 
-        public GenresReader2(string path)
+        public GenresReader(string path)
         {
             if (path == null)
                 throw new ArgumentNullException(nameof(path));

@@ -9,11 +9,11 @@ using Ksandr.Books.Import.Inpx;
 
 namespace Ksandr.Books.Import.Readers
 {
-    public class BooksReader2 : IDisposable
+    public class BooksReader : IDisposable
     {
         private readonly ZipArchive _zip;
 
-        public BooksReader2(string fileName)
+        public BooksReader(string fileName)
         {
             _zip = ZipFile.OpenRead(fileName);
 

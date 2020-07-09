@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CommandLine;
 
 namespace Ksandr.Books
@@ -10,18 +9,8 @@ namespace Ksandr.Books
         class WebOptions
         { }
 
-        [Verb("import", HelpText = "Import libaray archive from .inpx file.")]
+        [Verb("import2", HelpText = "Import libaray archive from .inpx file.")]
         class ImportOptions
-        {
-            [Option('i', "inpx", Required = true, HelpText = "Path to .inpx file")]
-            public string InpxFile { get; set; }
-
-            [Option('f', "force", Required = false, Default = false, HelpText = "Force database recreation without confirmation")]
-            public bool Force { get; set; }
-        }
-
-        [Verb("import2", HelpText = "New Import libaray archive from .inpx file.")]
-        class ImportOptions2
         {
             [Option('i', "inpx", Required = true, HelpText = "Path to .inpx file")]
             public string InpxFile { get; set; }
@@ -32,10 +21,9 @@ namespace Ksandr.Books
 
         public static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<WebOptions, ImportOptions, ImportOptions2>(args).MapResult(
+            return Parser.Default.ParseArguments<WebOptions, ImportOptions>(args).MapResult(
                 (WebOptions opts) => RunWebConsole(args),
-                (ImportOptions opts) => RunImport(opts),
-                (ImportOptions2 opts) => RunImport2(opts),
+                (ImportOptions opts) => RunImport2(opts),
                 errs => RunErrors(errs)
             );
         }
