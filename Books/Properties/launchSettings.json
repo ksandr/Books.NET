@@ -11,7 +11,7 @@
     },
     "Books (import)": {
       "commandName": "Project",
-      "commandLineArgs": "import --inpx App_Data\\librusec_local_fb2.inpx",
+      "commandLineArgs": "import2 --inpx App_Data\\librusec_local_fb2.inpx",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

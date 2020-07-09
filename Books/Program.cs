@@ -20,11 +20,22 @@ namespace Ksandr.Books
             public bool Force { get; set; }
         }
 
+        [Verb("import2", HelpText = "New Import libaray archive from .inpx file.")]
+        class ImportOptions2
+        {
+            [Option('i', "inpx", Required = true, HelpText = "Path to .inpx file")]
+            public string InpxFile { get; set; }
+
+            [Option('f', "force", Required = false, Default = false, HelpText = "Force database recreation without confirmation")]
+            public bool Force { get; set; }
+        }
+
         public static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<WebOptions, ImportOptions>(args).MapResult(
+            return Parser.Default.ParseArguments<WebOptions, ImportOptions, ImportOptions2>(args).MapResult(
                 (WebOptions opts) => RunWebConsole(args),
                 (ImportOptions opts) => RunImport(opts),
+                (ImportOptions2 opts) => RunImport2(opts),
                 errs => RunErrors(errs)
             );
         }
